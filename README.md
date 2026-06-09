@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 11 — Downloads Management
+Phase 13 — MiCilla Super Admin
 
 ## Stack
 
@@ -103,6 +103,30 @@ Admins can add, edit, publish, reorder, and remove school announcements. Categor
 - Edit page: [http://localhost:3000/admin/files](http://localhost:3000/admin/files)
 
 Admins can add file links for admission forms, prospectus, book lists, and fee notices. Published files appear in the public Downloads section and the admissions form button when linked.
+
+## Multi-School Public Sites (Phase 12)
+
+- Default homepage: [http://localhost:3000/](http://localhost:3000/) (uses `DEFAULT_SCHOOL_SLUG` from `.env`)
+- School by slug: [http://localhost:3000/schools/redemption-international-school](http://localhost:3000/schools/redemption-international-school)
+- Second demo school: [http://localhost:3000/schools/grace-basic-school](http://localhost:3000/schools/grace-basic-school)
+
+Each school loads its own content from PostgreSQL. Admin **Preview Website** opens the signed-in school's public page.
+
+Seeded demo admins:
+
+- Redemption: `admin@example.com` / `admin123!` (or your `.env` values)
+- Grace Basic School: `grace-admin@example.com` / `admin123!`
+
+## MiCilla Super Admin (Phase 13)
+
+- Login: [http://localhost:3000/super-admin/login](http://localhost:3000/super-admin/login)
+- Dashboard: [http://localhost:3000/super-admin/dashboard](http://localhost:3000/super-admin/dashboard)
+
+MiCilla staff can create schools, create school admins, reset admin passwords, activate/deactivate public websites, and view all schools.
+
+Default seeded super admin:
+
+- `super@micilla.com` / `super123!` (or your `SEED_SUPER_ADMIN_*` values in `.env`)
 
 Default seeded admin comes from your `.env` file:
 

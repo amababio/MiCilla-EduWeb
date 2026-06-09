@@ -45,6 +45,17 @@ check_contains "Homepage has hero" "Quality education" "/tmp/micilla-home.html"
 check_contains "Homepage has footer" "MiCilla Technologies" "/tmp/micilla-home.html"
 check_contains "Homepage has brand CSS" "color-mauve-500" "/tmp/micilla-home.html"
 
+CODE=$(curl -s -o /tmp/micilla-school-ris.html -w "%{http_code}" "$BASE/schools/redemption-international-school")
+check "GET /schools/redemption-international-school" "200" "$CODE"
+check_contains "School route has RIS name" "Redemption International School" "/tmp/micilla-school-ris.html"
+
+CODE=$(curl -s -o /tmp/micilla-school-gbs.html -w "%{http_code}" "$BASE/schools/grace-basic-school")
+check "GET /schools/grace-basic-school" "200" "$CODE"
+check_contains "School route has GBS name" "Grace Basic School" "/tmp/micilla-school-gbs.html"
+
+CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/schools/not-a-real-school")
+check "GET /schools/not-a-real-school" "404" "$CODE"
+
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/admin/login")
 check "GET /admin/login" "200" "$CODE"
 
@@ -102,7 +113,28 @@ check "GET /admin/dashboard after logout" "307" "$CODE"
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/")
 check "GET / after auth flow" "200" "$CODE"
 
-rm -f "$COOKIE" /tmp/micilla-home.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-achievements.html /tmp/micilla-notices.html /tmp/micilla-files.html /tmp/micilla-login.json
+SUPER_COOKIE=$(mktemp)
+CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/super-admin/login")
+check "GET /super-admin/login" "200" "$CODE"
+
+CODE=$(curl -s -o /tmp/micilla-super-login.json -w "%{http_code}" -X POST "$BASE/api/super-admin/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"super@micilla.com","password":"wrong"}')
+check "POST super-admin login wrong password" "401" "$CODE"
+
+CODE=$(curl -s -c "$SUPER_COOKIE" -b "$SUPER_COOKIE" -o /tmp/micilla-super-login.json -w "%{http_code}" -X POST "$BASE/api/super-admin/login" \
+  -H "Content-Type: application/json" \
+  -d '{"email":"super@micilla.com","password":"super123!"}')
+check "POST super-admin login correct" "200" "$CODE"
+
+CODE=$(curl -s -c "$SUPER_COOKIE" -b "$SUPER_COOKIE" -o /tmp/micilla-super-dash.html -w "%{http_code}" "$BASE/super-admin/dashboard")
+check "GET /super-admin/dashboard (auth)" "200" "$CODE"
+check_contains "Super admin dashboard" "All Schools" "/tmp/micilla-super-dash.html"
+
+CODE=$(curl -s -c "$SUPER_COOKIE" -b "$SUPER_COOKIE" -o /dev/null -w "%{http_code}" -X POST "$BASE/api/super-admin/logout")
+check "POST super-admin logout" "200" "$CODE"
+
+rm -f "$COOKIE" "$SUPER_COOKIE" /tmp/micilla-home.html /tmp/micilla-school-ris.html /tmp/micilla-school-gbs.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-achievements.html /tmp/micilla-notices.html /tmp/micilla-files.html /tmp/micilla-login.json /tmp/micilla-super-login.json /tmp/micilla-super-dash.html
 
 echo ""
 echo "=== Results: $PASS passed, $FAIL failed ==="

@@ -1,12 +1,19 @@
 import { PrismaClient } from "@prisma/client";
-import { redemptionSchoolSeed } from "../src/data/seed-content";
+import {
+  demoSchoolSeeds,
+  type SchoolSeed,
+} from "../src/data/seed-content";
 import { hashPassword } from "../src/lib/password";
 
 const prisma = new PrismaClient();
 
-async function main() {
-  const seed = redemptionSchoolSeed;
+const demoAdminAccounts: Record<string, string> = {
+  "redemption-international-school":
+    (process.env.SEED_ADMIN_EMAIL ?? "admin@example.com").toLowerCase(),
+  "grace-basic-school": "grace-admin@example.com",
+};
 
+async function seedSchool(seed: SchoolSeed) {
   const school = await prisma.school.upsert({
     where: { slug: seed.slug },
     update: {
@@ -144,21 +151,19 @@ async function main() {
     })),
   });
 
-  const adminEmail = (
-    process.env.SEED_ADMIN_EMAIL ?? "admin@example.com"
-  ).toLowerCase();
+  const adminEmail =
+    demoAdminAccounts[seed.slug] ??
+    (process.env.SEED_ADMIN_EMAIL ?? "admin@example.com").toLowerCase();
   const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "admin123!";
-  const adminName = "School Admin";
   const passwordHash = await hashPassword(adminPassword);
 
-  // Keep one admin account per school (avoids stale accounts when email changes).
   await prisma.admin.deleteMany({ where: { schoolId: school.id } });
 
   await prisma.admin.create({
     data: {
       schoolId: school.id,
       email: adminEmail,
-      name: adminName,
+      name: "School Admin",
       passwordHash,
       isActive: true,
     },
@@ -166,6 +171,35 @@ async function main() {
 
   console.log(`Seeded school: ${school.name} (${school.slug})`);
   console.log(`Seeded admin: ${adminEmail}`);
+}
+
+async function main() {
+  for (const seed of demoSchoolSeeds) {
+    await seedSchool(seed);
+  }
+
+  const superAdminEmail = (
+    process.env.SEED_SUPER_ADMIN_EMAIL ?? "super@micilla.com"
+  ).toLowerCase();
+  const superAdminPassword = process.env.SEED_SUPER_ADMIN_PASSWORD ?? "super123!";
+  const superAdminPasswordHash = await hashPassword(superAdminPassword);
+
+  await prisma.superAdmin.upsert({
+    where: { email: superAdminEmail },
+    update: {
+      name: "MiCilla Super Admin",
+      passwordHash: superAdminPasswordHash,
+      isActive: true,
+    },
+    create: {
+      email: superAdminEmail,
+      name: "MiCilla Super Admin",
+      passwordHash: superAdminPasswordHash,
+      isActive: true,
+    },
+  });
+
+  console.log(`Seeded super admin: ${superAdminEmail}`);
 }
 
 main()

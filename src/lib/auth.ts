@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { getDefaultSchoolSlug } from "@/lib/school-slug";
 import {
   type AdminSession,
   verifySessionToken,
@@ -20,7 +21,25 @@ export async function getAdminSession(): Promise<AdminSession | null> {
   if (!token) {
     return null;
   }
-  return verifySessionToken(token);
+
+  const session = await verifySessionToken(token);
+  if (!session) {
+    return null;
+  }
+
+  if (session.schoolSlug) {
+    return session;
+  }
+
+  const school = await prisma.school.findUnique({
+    where: { id: session.schoolId },
+    select: { slug: true },
+  });
+
+  return {
+    ...session,
+    schoolSlug: school?.slug ?? getDefaultSchoolSlug(),
+  };
 }
 
 export async function authenticateAdmin(
@@ -29,14 +48,10 @@ export async function authenticateAdmin(
 ): Promise<AdminSession | null> {
   const normalizedEmail = email.trim().toLowerCase();
   const normalizedPassword = password.trim();
-  const schoolSlug =
-    process.env.DEFAULT_SCHOOL_SLUG ?? "redemption-international-school";
-
   const admin = await prisma.admin.findFirst({
     where: {
       email: normalizedEmail,
       isActive: true,
-      school: { slug: schoolSlug },
     },
     include: { school: true },
   });
@@ -53,6 +68,7 @@ export async function authenticateAdmin(
   return {
     adminId: admin.id,
     schoolId: admin.schoolId,
+    schoolSlug: admin.school.slug,
     schoolName: admin.school.name,
     email: admin.email,
     name: admin.name,

@@ -1,3 +1,4 @@
+import { getDefaultSchoolSlug } from "@/lib/school-slug";
 import { prisma } from "@/lib/prisma";
 import {
   getAchievementDisplayLabel,
@@ -18,13 +19,10 @@ function parseJsonArray<T>(value: unknown, fallback: T[] = []): T[] {
 export async function getPublicSchoolData(
   slug?: string,
 ): Promise<PublicSchoolData | null> {
-  const schoolSlug =
-    slug ??
-    process.env.DEFAULT_SCHOOL_SLUG ??
-    "redemption-international-school";
+  const schoolSlug = slug ?? getDefaultSchoolSlug();
 
-  const school = await prisma.school.findUnique({
-    where: { slug: schoolSlug },
+  const school = await prisma.school.findFirst({
+    where: { slug: schoolSlug, isActive: true },
     include: {
       websiteSettings: true,
       programs: {

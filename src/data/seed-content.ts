@@ -177,4 +177,121 @@ export const redemptionSchoolSeed = {
   ],
 } as const;
 
+export const graceBasicSchoolSeed = {
+  slug: "grace-basic-school",
+  name: "Grace Basic School",
+  initials: "GBS",
+  tagline: "Building confident learners every day",
+  motto: "Learning with purpose and integrity",
+  poBox: "P. O. BOX 120",
+  location: "Tafo, Kumasi",
+  phone: "024 111 2233",
+  whatsapp: "0241112233",
+  email: "info@gracebasicschool.edu.gh",
+  officeHours: "Monday – Friday, 8:00 AM – 3:30 PM",
+  brandColor: "#5b8def",
+  websiteSettings: {
+    heroDescription:
+      "A welcoming basic school focused on literacy, numeracy, creativity, and good character for young learners.",
+    heroCtaPrimary: "Apply for Admission",
+    heroCtaSecondary: "Chat on WhatsApp",
+    admissionsHeadline: "Admissions Open for 2026/2027",
+    admissionsDescription:
+      "Grace Basic School welcomes new families into Nursery, KG, and Primary. Contact the office for placement details.",
+    admissionLevels: ["Nursery", "KG", "Primary"],
+    aboutDescription:
+      "Grace Basic School supports learners with caring teachers, structured lessons, and a positive classroom culture.",
+    aboutValues: [
+      {
+        title: "Strong Foundations",
+        description: "Literacy and numeracy skills are built step by step.",
+      },
+      {
+        title: "Character First",
+        description: "Respect, honesty, and responsibility are part of daily school life.",
+      },
+    ],
+    whyChooseUs: [
+      "Caring teachers",
+      "Structured learning",
+      "Parent communication",
+      "Safe campus",
+    ],
+    whyChooseUsIntro:
+      "Families choose Grace Basic School for its warm community and steady academic progress.",
+    achievementsSubtitle:
+      "Celebrating learner progress, teamwork, and classroom creativity.",
+    achievementsNote:
+      "Student names are shared publicly only when approved by the school.",
+    contactHeadline: "Need admission information?",
+    contactDescription:
+      "Call or WhatsApp the school office for visits, placement, and enrolment support.",
+    contactCtaHeadline: "Chat with us on WhatsApp",
+    contactCtaDescription:
+      "Reach the school office quickly for admission questions.",
+    poweredByFooter: "Powered by MiCilla Technologies",
+  },
+  programs: [
+    {
+      name: "Nursery",
+      description: "Play-based early learning with language and social skills.",
+    },
+    {
+      name: "Primary",
+      description: "Structured literacy, numeracy, and creative learning activities.",
+    },
+  ],
+  gallery: [
+    {
+      title: "Reading Corner",
+      category: "Academics",
+      accentClass: "from-mauve-200 to-mauve-500",
+    },
+    {
+      title: "Assembly Day",
+      category: "Events",
+      accentClass: "from-mauve-300 to-mauve-600",
+    },
+  ],
+  achievements: [
+    {
+      title: "Literacy Progress Award",
+      description: "Primary learners showed strong reading improvement this term.",
+      category: "school_project",
+      privacyDisplay: "hide",
+      subjectName: null,
+      subjectClass: null,
+    },
+  ],
+  announcements: [
+    {
+      title: "Open day for new parents",
+      category: "event",
+      message: "Visit the school on Friday at 9:00 AM to meet teachers and tour the campus.",
+      displayDate: "April 2026",
+    },
+  ],
+  downloads: [
+    {
+      title: "Admission Form",
+      description: "Download the Grace Basic School admission form.",
+      category: "admission_form",
+      fileUrl: null,
+    },
+    {
+      title: "School Prospectus",
+      description: "Overview of programs and school values.",
+      category: "prospectus",
+      fileUrl: null,
+    },
+  ],
+} as const;
+
 export type RedemptionSchoolSeed = typeof redemptionSchoolSeed;
+export type GraceBasicSchoolSeed = typeof graceBasicSchoolSeed;
+export type SchoolSeed = RedemptionSchoolSeed | GraceBasicSchoolSeed;
+
+export const demoSchoolSeeds = [
+  redemptionSchoolSeed,
+  graceBasicSchoolSeed,
+] as const;

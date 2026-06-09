@@ -44,6 +44,10 @@ export default function AdminLoginPage() {
           <Link href="/" className="font-medium text-mauve-700 hover:underline">
             Back to website
           </Link>
+          {" · "}
+          <Link href="/super-admin/login" className="font-medium text-mauve-700 hover:underline">
+            MiCilla super admin
+          </Link>
         </p>
       </div>
     </div>

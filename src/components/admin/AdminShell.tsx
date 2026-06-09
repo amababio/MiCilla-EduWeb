@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import type { AdminSession } from "@/lib/auth-session";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 import { getNavItemsForPath } from "@/components/admin/admin-nav";
+import { getSchoolPublicPath } from "@/lib/school-slug";
 
 type AdminShellProps = {
   session: AdminSession;
@@ -68,7 +69,7 @@ export function AdminShell({ session, children }: AdminShellProps) {
             </div>
             <div className="flex flex-wrap gap-2">
               <Link
-                href="/"
+                href={getSchoolPublicPath(session.schoolSlug)}
                 target="_blank"
                 className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-mauve-600"
               >

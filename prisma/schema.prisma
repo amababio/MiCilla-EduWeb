@@ -22,6 +22,7 @@ model School {
   officeHours String
   logoUrl     String?
   brandColor  String   @default("#cf85ef")
+  isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -153,4 +154,14 @@ model Admin {
 
   @@unique([schoolId, email])
   @@index([email])
+}
+
+model SuperAdmin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

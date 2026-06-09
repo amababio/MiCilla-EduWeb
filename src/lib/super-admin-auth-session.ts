@@ -1,12 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
 
-export const SESSION_COOKIE_NAME = "micilla_admin_session";
+export const SUPER_ADMIN_SESSION_COOKIE_NAME = "micilla_super_admin_session";
 
-export type AdminSession = {
-  adminId: string;
-  schoolId: string;
-  schoolSlug: string;
-  schoolName: string;
+export type SuperAdminSession = {
+  superAdminId: string;
   email: string;
   name: string;
 };
@@ -19,36 +16,32 @@ function getSessionSecret() {
   return new TextEncoder().encode(secret);
 }
 
-export async function createSessionToken(
-  payload: AdminSession,
+export async function createSuperAdminSessionToken(
+  payload: SuperAdminSession,
 ): Promise<string> {
-  return new SignJWT({ ...payload })
+  return new SignJWT({ ...payload, role: "super_admin" })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
     .setExpirationTime("7d")
     .sign(getSessionSecret());
 }
 
-export async function verifySessionToken(
+export async function verifySuperAdminSessionToken(
   token: string,
-): Promise<AdminSession | null> {
+): Promise<SuperAdminSession | null> {
   try {
     const { payload } = await jwtVerify(token, getSessionSecret());
     if (
-      typeof payload.adminId !== "string" ||
-      typeof payload.schoolId !== "string" ||
-      typeof payload.schoolName !== "string" ||
+      payload.role !== "super_admin" ||
+      typeof payload.superAdminId !== "string" ||
       typeof payload.email !== "string" ||
       typeof payload.name !== "string"
     ) {
       return null;
     }
+
     return {
-      adminId: payload.adminId,
-      schoolId: payload.schoolId,
-      schoolSlug:
-        typeof payload.schoolSlug === "string" ? payload.schoolSlug : "",
-      schoolName: payload.schoolName,
+      superAdminId: payload.superAdminId,
       email: payload.email,
       name: payload.name,
     };
