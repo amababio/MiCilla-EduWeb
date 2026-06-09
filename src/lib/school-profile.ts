@@ -55,7 +55,6 @@ export type SchoolProfileInput = {
   whatsapp: string;
   email: string;
   officeHours: string;
-  logoUrl: string;
   brandColor: string;
 };
 
@@ -73,7 +72,6 @@ export function parseSchoolProfileInput(
     whatsapp: String(formData.get("whatsapp") ?? "").trim(),
     email: String(formData.get("email") ?? "").trim().toLowerCase(),
     officeHours: String(formData.get("officeHours") ?? "").trim(),
-    logoUrl: String(formData.get("logoUrl") ?? "").trim(),
     brandColor: String(formData.get("brandColor") ?? "").trim(),
   };
 
@@ -91,14 +89,6 @@ export function parseSchoolProfileInput(
   const brandColor = normalizeBrandColor(data.brandColor);
   if (!brandColor) {
     return { data: null, error: "Please choose a valid brand color." };
-  }
-
-  if (data.logoUrl) {
-    const logoUrl = normalizeOptionalUrl(data.logoUrl);
-    if (!logoUrl) {
-      return { data: null, error: "Logo link must be a valid http or https URL." };
-    }
-    data.logoUrl = logoUrl;
   }
 
   data.brandColor = brandColor;

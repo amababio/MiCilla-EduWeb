@@ -66,7 +66,7 @@ The dashboard includes a sidebar, summary cards, Preview Website, and Sign Out.
 
 - Edit page: [http://localhost:3000/admin/school-profile](http://localhost:3000/admin/school-profile)
 
-Admins can update school name, motto, contact details, logo link, and brand color. Saving changes updates the public website.
+Admins can update school name, motto, contact details, uploaded school logo, and brand color. Saving changes updates the public website.
 
 ## Homepage Content (Phase 6)
 

@@ -123,6 +123,8 @@ Add:
 
 Backups are written to `BACKUP_DIR` (default `/var/backups/micilla-eduweb`).
 
+Include `public/uploads/` in your server backup plan so uploaded school logos are preserved.
+
 ## 9. Updates (new releases)
 
 ```bash

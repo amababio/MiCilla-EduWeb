@@ -88,6 +88,7 @@ check_contains "Homepage content form" "Homepage Content" "/tmp/micilla-homepage
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-profile.html -w "%{http_code}" "$BASE/admin/school-profile")
 check "GET /admin/school-profile" "200" "$CODE"
 check_contains "School profile form" "School Profile" "/tmp/micilla-profile.html"
+check_contains "School profile logo upload" "Upload Logo" "/tmp/micilla-profile.html"
 
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-programs.html -w "%{http_code}" "$BASE/admin/programs")
 check "GET /admin/programs" "200" "$CODE"

@@ -96,7 +96,6 @@ export async function updateSchoolProfile(formData: FormData): Promise<{
         whatsapp: data.whatsapp,
         email: data.email,
         officeHours: data.officeHours,
-        logoUrl: data.logoUrl || null,
         brandColor: data.brandColor,
       },
     });

@@ -23,7 +23,7 @@ export default async function SchoolProfilePage() {
           School Profile
         </h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-          Update your school name, contact details, logo, and brand color. Changes
+          Update your school name, contact details, logo upload, and brand color. Changes
           appear on your public website after you save.
         </p>
       </div>
