@@ -1,0 +1,20 @@
+# Production PostgreSQL for a VPS. Binds to localhost only.
+# Usage: from repo root, with POSTGRES_* vars in .env or shell:
+#   docker compose -f deploy/docker-compose.prod.yml up -d
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: micilla-eduweb-db-prod
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-micilla}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-micilla_eduweb}
+    volumes:
+      - micilla_eduweb_pgdata_prod:/var/lib/postgresql/data
+
+volumes:
+  micilla_eduweb_pgdata_prod:

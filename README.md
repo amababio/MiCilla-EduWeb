@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 15 — Public Polish and Mobile Optimization
+Phase 16 — Deployment
 
 ## Stack
 
@@ -144,6 +144,29 @@ Improvements for parents on phones and for sales demos:
 - Empty states when a section has no published content yet
 - Safer image loading with lazy load and broken-link fallbacks
 - Richer footer with office hours, quick links, and contact actions
+
+## Deployment (Phase 16)
+
+Production deployment uses a VPS with PostgreSQL, Caddy (HTTPS), and systemd or PM2.
+
+**Quick links**
+
+- Runbook: [deploy/README.md](deploy/README.md)
+- Env template: [.env.example](.env.example)
+- Health check: `GET /api/health`
+
+**Production commands**
+
+```bash
+cp .env.example .env          # set DATABASE_URL, SESSION_SECRET, etc.
+docker compose -f deploy/docker-compose.prod.yml up -d
+npm run deploy:install        # ci, migrate deploy, build
+npm start                     # or systemd / PM2 (see deploy/README.md)
+npm run deploy:backup         # manual DB backup
+BASE_URL=https://your-domain npm run test:smoke
+```
+
+Do not run `npm run db:seed` on a live production server unless you want demo data.
 
 Default seeded admin comes from your `.env` file:
 
