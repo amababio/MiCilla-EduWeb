@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 6 — Homepage Content Management
+Phase 7 — Programs Management
 
 ## Stack
 
@@ -73,6 +73,12 @@ Admins can update school name, motto, contact details, logo link, and brand colo
 - Edit page: [http://localhost:3000/admin/homepage-content](http://localhost:3000/admin/homepage-content)
 
 Admins can update hero message, admissions text, about section, Why Choose Us points, and contact messages. Saving changes updates the public homepage.
+
+## Programs (Phase 7)
+
+- Edit page: [http://localhost:3000/admin/programs](http://localhost:3000/admin/programs)
+
+Admins can add, edit, hide, reorder, and remove school programs. Optional photo links appear on the public Programs section.
 
 Default seeded admin comes from your `.env` file:
 

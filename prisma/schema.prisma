@@ -65,6 +65,7 @@ model Program {
   school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   name        String
   description String
+  imageUrl    String?
   sortOrder   Int      @default(0)
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())

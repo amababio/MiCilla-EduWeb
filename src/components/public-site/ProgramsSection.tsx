@@ -18,17 +18,27 @@ export function ProgramsSection({ school }: ProgramsSectionProps) {
           {school.programs.map((program) => (
             <article
               key={program.name}
-              className="flex flex-col rounded-2xl border border-mauve-100 bg-gradient-to-b from-white to-mauve-50 p-6 shadow-sm transition hover:border-mauve-300 hover:shadow-md"
+              className="flex flex-col overflow-hidden rounded-2xl border border-mauve-100 bg-gradient-to-b from-white to-mauve-50 shadow-sm transition hover:border-mauve-300 hover:shadow-md"
             >
-              <span className="inline-flex w-fit rounded-full bg-mauve-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-mauve-700">
-                Level
-              </span>
-              <h3 className="mt-4 text-xl font-semibold text-slate-900">
-                {program.name}
-              </h3>
-              <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
-                {program.description}
-              </p>
+              {program.imageUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={program.imageUrl}
+                  alt={`${program.name} program`}
+                  className="h-40 w-full object-cover"
+                />
+              ) : null}
+              <div className="flex flex-1 flex-col p-6">
+                <span className="inline-flex w-fit rounded-full bg-mauve-200 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-mauve-700">
+                  Level
+                </span>
+                <h3 className="mt-4 text-xl font-semibold text-slate-900">
+                  {program.name}
+                </h3>
+                <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600">
+                  {program.description}
+                </p>
+              </div>
             </article>
           ))}
         </div>

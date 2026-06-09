@@ -28,6 +28,7 @@ export type DownloadItem = {
 export type ProgramItem = {
   name: string;
   description: string;
+  imageUrl: string | null;
 };
 
 export type NavLink = {

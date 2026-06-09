@@ -78,6 +78,7 @@ export async function getPublicSchoolData(
     programs: school.programs.map((program) => ({
       name: program.name,
       description: program.description,
+      imageUrl: program.imageUrl,
     })),
     whyChooseUs: parseJsonArray<string>(settings.whyChooseUs),
     whyChooseUsIntro: settings.whyChooseUsIntro,
