@@ -46,9 +46,18 @@ export function HeroSection({ school }: HeroSectionProps) {
         <div className="relative">
           <div className="aspect-[4/3] overflow-hidden rounded-3xl border border-mauve-200 bg-gradient-to-br from-mauve-300 via-mauve-400 to-mauve-500 shadow-lg">
             <div className="flex h-full flex-col items-center justify-center px-6 text-center text-white">
-              <span className="text-5xl font-bold opacity-90 sm:text-6xl">
-                {school.initials}
-              </span>
+              {school.logoUrl ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={school.logoUrl}
+                  alt={`${school.name} logo`}
+                  className="mb-4 max-h-32 max-w-[80%] rounded-2xl bg-white/10 object-contain p-3"
+                />
+              ) : (
+                <span className="text-5xl font-bold opacity-90 sm:text-6xl">
+                  {school.initials}
+                </span>
+              )}
               <p className="mt-4 text-lg font-semibold sm:text-xl">
                 {school.name}
               </p>

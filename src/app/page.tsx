@@ -11,13 +11,14 @@ import { AnnouncementsPreview } from "@/components/public-site/AnnouncementsPrev
 import { DownloadsPreview } from "@/components/public-site/DownloadsPreview";
 import { ContactSection } from "@/components/public-site/ContactSection";
 import { Footer } from "@/components/public-site/Footer";
-import { getCachedPublicSchoolData } from "@/lib/get-public-school-data";
+import { getPublicSchoolData } from "@/lib/get-public-school-data";
+import { SchoolBrandStyles } from "@/components/public-site/SchoolBrandStyles";
 
 /** Regenerate the cached homepage every 5 minutes when content changes. */
 export const revalidate = 300;
 
 export default async function Home() {
-  const school = await getCachedPublicSchoolData();
+  const school = await getPublicSchoolData();
 
   if (!school) {
     notFound();
@@ -25,6 +26,7 @@ export default async function Home() {
 
   return (
     <>
+      <SchoolBrandStyles brandColor={school.brandColor} />
       <Header school={school} />
       <main>
         <HeroSection school={school} />

@@ -11,6 +11,7 @@ export const redemptionSchoolSeed = {
   whatsapp: "0548234585",
   email: "info@redemptioninternationalschool.edu.gh",
   officeHours: "Monday – Friday, 7:30 AM – 4:00 PM",
+  brandColor: "#cf85ef",
   websiteSettings: {
     heroDescription:
       "A safe, disciplined, and child-friendly school environment focused on academic excellence, moral training, and strong foundational learning.",

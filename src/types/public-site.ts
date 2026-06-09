@@ -46,6 +46,8 @@ export type PublicSchoolData = {
   whatsapp: string;
   email: string;
   officeHours: string;
+  logoUrl: string | null;
+  brandColor: string;
   heroDescription: string;
   admissions: {
     headline: string;

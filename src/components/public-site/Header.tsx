@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { phoneToTel, phoneToWhatsApp } from "@/lib/phone";
+import { SchoolLogoMark } from "@/components/public-site/SchoolLogoMark";
 import type { PublicSchoolData } from "@/types/public-site";
 
 type HeaderProps = {
@@ -19,9 +20,7 @@ export function Header({ school }: HeaderProps) {
           className="flex min-w-0 items-center gap-3"
           onClick={() => setMenuOpen(false)}
         >
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mauve-500 text-sm font-bold text-white shadow-sm">
-            {school.initials}
-          </span>
+          <SchoolLogoMark school={school} />
           <span className="truncate text-sm font-semibold text-slate-900 sm:text-base">
             {school.name}
           </span>

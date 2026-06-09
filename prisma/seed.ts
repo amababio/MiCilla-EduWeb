@@ -20,6 +20,7 @@ async function main() {
       whatsapp: seed.whatsapp,
       email: seed.email,
       officeHours: seed.officeHours,
+      brandColor: seed.brandColor,
     },
     create: {
       slug: seed.slug,
@@ -33,6 +34,7 @@ async function main() {
       whatsapp: seed.whatsapp,
       email: seed.email,
       officeHours: seed.officeHours,
+      brandColor: seed.brandColor,
     },
   });
 

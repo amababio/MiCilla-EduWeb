@@ -20,6 +20,8 @@ model School {
   whatsapp    String
   email       String
   officeHours String
+  logoUrl     String?
+  brandColor  String   @default("#cf85ef")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

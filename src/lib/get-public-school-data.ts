@@ -1,4 +1,3 @@
-import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import {
   defaultNavLinks,
@@ -62,6 +61,8 @@ export async function getPublicSchoolData(
     whatsapp: school.whatsapp,
     email: school.email,
     officeHours: school.officeHours,
+    logoUrl: school.logoUrl,
+    brandColor: school.brandColor,
     heroDescription: settings.heroDescription,
     admissions: {
       headline: settings.admissionsHeadline,
@@ -108,23 +109,4 @@ export async function getPublicSchoolData(
     },
     navLinks: defaultNavLinks,
   };
-}
-
-/** Cached homepage data — avoids hitting the database on every request. */
-export async function getCachedPublicSchoolData(
-  slug?: string,
-): Promise<PublicSchoolData | null> {
-  const schoolSlug =
-    slug ??
-    process.env.DEFAULT_SCHOOL_SLUG ??
-    "redemption-international-school";
-
-  return unstable_cache(
-    () => getPublicSchoolData(schoolSlug),
-    ["public-school-data", schoolSlug],
-    {
-      revalidate: 300,
-      tags: [`school-public-${schoolSlug}`],
-    },
-  )();
 }

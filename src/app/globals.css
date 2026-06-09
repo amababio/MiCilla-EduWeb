@@ -9,8 +9,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
+}
 
-  /* Brighter lilac-mauve palette */
+/* Use @theme (not inline) so utilities reference CSS variables that SchoolBrandStyles can override. */
+@theme {
   --color-mauve-50: #fdf7ff;
   --color-mauve-100: #f9edff;
   --color-mauve-200: #f3ddfd;

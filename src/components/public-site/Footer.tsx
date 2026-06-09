@@ -3,6 +3,7 @@ import {
   phoneToTel,
   phoneToWhatsApp,
 } from "@/lib/phone";
+import { SchoolLogoMark } from "@/components/public-site/SchoolLogoMark";
 import type { PublicSchoolData } from "@/types/public-site";
 
 type FooterProps = {
@@ -16,9 +17,11 @@ export function Footer({ school }: FooterProps) {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-mauve-600">
-                {school.initials}
-              </span>
+              <SchoolLogoMark
+                school={school}
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-mauve-600"
+                imageClassName="h-10 w-10 rounded-xl object-cover"
+              />
               <div>
                 <p className="font-semibold text-white">{school.name}</p>
                 <p className="text-sm text-white/80">{school.motto}</p>

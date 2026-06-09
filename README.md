@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 4 — Admin Dashboard Shell
+Phase 5 — School Profile and Branding
 
 ## Stack
 
@@ -61,6 +61,12 @@ The homepage loads school content from PostgreSQL (seeded with Redemption Intern
 - Dashboard: [http://localhost:3000/admin/dashboard](http://localhost:3000/admin/dashboard)
 
 The dashboard includes a sidebar, summary cards, Preview Website, and Sign Out.
+
+## School Profile (Phase 5)
+
+- Edit page: [http://localhost:3000/admin/school-profile](http://localhost:3000/admin/school-profile)
+
+Admins can update school name, motto, contact details, logo link, and brand color. Saving changes updates the public website.
 
 Default seeded admin comes from your `.env` file:
 
