@@ -1,7 +1,7 @@
 "use server";
 
 import { getAdminSession } from "@/lib/auth";
-import { parseGalleryInput } from "@/lib/gallery";
+import { galleryAccentPresets, parseGalleryInput } from "@/lib/gallery";
 import {
   deleteUploadedImage,
   getUploadedImageFromForm,
@@ -53,6 +53,134 @@ export type GalleryFormState = {
   error?: string;
   message?: string;
 };
+
+const BULK_UPLOAD_LIMIT = 50;
+
+const presetValues: Set<string> = new Set(
+  galleryAccentPresets.map((preset) => preset.value),
+);
+
+function titleFromUploadFile(
+  file: File,
+  index: number,
+  category: string,
+): string {
+  const base = file.name
+    .replace(/\.[^.]+$/, "")
+    .replace(/[-_]+/g, " ")
+    .trim();
+
+  if (base) {
+    return base;
+  }
+
+  return `${category} Photo ${index + 1}`;
+}
+
+function getUploadFiles(formData: FormData): File[] {
+  return formData
+    .getAll("photos")
+    .filter((entry): entry is File => entry instanceof File && entry.size > 0);
+}
+
+export async function bulkCreateGalleryPhotosFormAction(
+  _prevState: GalleryFormState,
+  formData: FormData,
+): Promise<GalleryFormState> {
+  const session = await getSession();
+  if (!session) {
+    return { success: false, error: "Please sign in again." };
+  }
+
+  const category = String(formData.get("category") ?? "").trim();
+  if (!category) {
+    return { success: false, error: "Please enter a category." };
+  }
+
+  const accentClass = String(formData.get("accentClass") ?? "").trim();
+  if (!presetValues.has(accentClass)) {
+    return { success: false, error: "Please choose a placeholder color." };
+  }
+
+  const files = getUploadFiles(formData);
+  if (files.length === 0) {
+    return { success: false, error: "Please choose one or more photos to upload." };
+  }
+
+  if (files.length > BULK_UPLOAD_LIMIT) {
+    return {
+      success: false,
+      error: `Please upload up to ${BULK_UPLOAD_LIMIT} photos at a time.`,
+    };
+  }
+
+  const isFeatured = formData.get("isFeatured") === "on";
+
+  try {
+    const lastPhoto = await prisma.galleryImage.findFirst({
+      where: { schoolId: session.schoolId },
+      orderBy: { sortOrder: "desc" },
+      select: { sortOrder: true },
+    });
+
+    let nextSortOrder = (lastPhoto?.sortOrder ?? -1) + 1;
+    let uploadedCount = 0;
+
+    for (const [index, file] of files.entries()) {
+      const photo = await prisma.galleryImage.create({
+        data: {
+          schoolId: session.schoolId,
+          title: titleFromUploadFile(file, index, category),
+          category,
+          imageUrl: null,
+          accentClass,
+          isFeatured,
+          sortOrder: nextSortOrder,
+        },
+      });
+
+      nextSortOrder += 1;
+
+      const saved = await saveSchoolImageFile(
+        session.schoolId,
+        "gallery",
+        photo.id,
+        file,
+      );
+
+      if ("error" in saved) {
+        await prisma.galleryImage.delete({ where: { id: photo.id } });
+        return {
+          success: false,
+          error:
+            uploadedCount > 0
+              ? `${saved.error} ${uploadedCount} photo(s) were uploaded before this error.`
+              : saved.error,
+        };
+      }
+
+      await prisma.galleryImage.update({
+        where: { id: photo.id },
+        data: { imageUrl: saved.publicPath },
+      });
+
+      uploadedCount += 1;
+    }
+
+    revalidatePublicSchoolPages(session.schoolSlug);
+
+    return {
+      success: true,
+      message: `${uploadedCount} photo${uploadedCount === 1 ? "" : "s"} added to ${category}.`,
+    };
+  } catch (error) {
+    console.error("bulkCreateGalleryPhotosFormAction failed:", error);
+    return {
+      success: false,
+      error: "Could not upload the photos. Please try again.",
+    };
+  }
+}
 
 export async function createGalleryPhotoFormAction(
   _prevState: GalleryFormState,
@@ -113,8 +241,8 @@ export async function createGalleryPhotoFormAction(
     return {
       success: true,
       message: parsed.data.isFeatured
-        ? "Photo added and shown on your public homepage."
-        : "Photo added. It is saved but not shown on the homepage yet.",
+        ? "Photo added. Its category can appear on the homepage gallery."
+        : "Photo added to your library.",
     };
   } catch (error) {
     console.error("createGalleryPhotoFormAction failed:", error);

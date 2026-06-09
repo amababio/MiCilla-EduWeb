@@ -5,7 +5,7 @@ export const IMAGE_ACCEPT =
 
 export const IMAGE_ACCEPT_LABEL = "JPG, PNG, WebP, GIF, BMP, or HEIC";
 
-export type ImageUploadCategory = "logo" | "gallery" | "programs";
+export type ImageUploadCategory = "logo" | "gallery" | "programs" | "hero";
 
 export const ALLOWED_IMAGE_MIME_TYPES = new Map<string, string>([
   ["image/jpeg", "jpg"],
@@ -61,7 +61,7 @@ export function parseUploadedAssetPath(
 ): { schoolId: string; category: ImageUploadCategory; basename: string } | null {
   const pathname = url.split("?")[0];
   const match = pathname.match(
-    /^\/uploads\/schools\/([^/]+)\/(logo|gallery|programs)\/(.+)$/,
+    /^\/uploads\/schools\/([^/]+)\/(logo|gallery|programs|hero)\/(.+)$/,
   );
 
   if (!match) {

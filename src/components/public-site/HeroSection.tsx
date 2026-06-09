@@ -1,6 +1,8 @@
 import { phoneToWhatsApp } from "@/lib/phone";
 import { SchoolImage } from "@/components/shared/SchoolImage";
 import { HeroBackgroundShapes } from "@/components/public-site/HeroBackgroundShapes";
+import { HeroCarousel } from "@/components/public-site/HeroCarousel";
+import { SchoolLogoMark } from "@/components/public-site/SchoolLogoMark";
 import type { PublicSchoolData } from "@/types/public-site";
 
 type HeroSectionProps = {
@@ -8,6 +10,9 @@ type HeroSectionProps = {
 };
 
 export function HeroSection({ school }: HeroSectionProps) {
+  const heroSlides = school.heroSlides;
+  const hasCarousel = heroSlides.length > 0;
+
   return (
     <section
       id="home"
@@ -15,7 +20,7 @@ export function HeroSection({ school }: HeroSectionProps) {
     >
       <HeroBackgroundShapes />
       <div className="relative mx-auto grid max-w-6xl gap-10 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-2 lg:items-center lg:gap-12">
-        <div>
+        <div className="order-2 lg:order-1">
           <p className="motion-hero-enter text-sm font-semibold uppercase tracking-wide text-mauve-600">
             Welcome to
           </p>
@@ -49,33 +54,8 @@ export function HeroSection({ school }: HeroSectionProps) {
           </div>
         </div>
 
-        <div className="motion-hero-enter motion-hero-enter-delay-2 relative">
-          <div className="motion-card aspect-[4/3] overflow-hidden rounded-3xl border border-mauve-200 bg-gradient-to-br from-mauve-300 via-mauve-400 to-mauve-500 shadow-lg">
-            <div className="flex h-full flex-col items-center justify-center px-6 text-center text-white">
-              {school.logoUrl ? (
-                <SchoolImage
-                  src={school.logoUrl}
-                  alt={`${school.name} logo`}
-                  className="mb-4 max-h-32 max-w-[80%] rounded-2xl bg-white/10 object-contain p-3"
-                  priority
-                  fallback={
-                    <span className="text-5xl font-bold opacity-90 sm:text-6xl">
-                      {school.initials}
-                    </span>
-                  }
-                />
-              ) : (
-                <span className="text-5xl font-bold opacity-90 sm:text-6xl">
-                  {school.initials}
-                </span>
-              )}
-              <p className="mt-4 text-lg font-semibold sm:text-xl">{school.name}</p>
-              <p className="mt-2 max-w-xs text-sm text-mauve-50 sm:text-base">
-                School photo placeholder — bright classrooms, happy learners,
-                and active school life.
-              </p>
-            </div>
-          </div>
+        <div className="motion-hero-enter motion-hero-enter-delay-2 relative order-1 lg:order-2">
+          <HeroVisualCard school={school} hasCarousel={hasCarousel} heroSlides={heroSlides} />
           <div className="absolute -bottom-4 -left-4 hidden rounded-2xl border border-mauve-200 bg-white px-4 py-3 shadow-md sm:block">
             <p className="text-xs font-semibold uppercase tracking-wide text-mauve-600">
               Our Motto
@@ -85,5 +65,64 @@ export function HeroSection({ school }: HeroSectionProps) {
         </div>
       </div>
     </section>
+  );
+}
+
+type HeroVisualCardProps = {
+  school: PublicSchoolData;
+  hasCarousel: boolean;
+  heroSlides: PublicSchoolData["heroSlides"];
+};
+
+function HeroVisualCard({ school, hasCarousel, heroSlides }: HeroVisualCardProps) {
+  if (hasCarousel) {
+    return (
+      <div className="motion-card relative aspect-[4/3] overflow-hidden rounded-3xl border border-mauve-200 bg-mauve-200 shadow-lg">
+        <HeroCarousel slides={heroSlides} priority />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-black/10 to-black/20" />
+        <div className="pointer-events-none absolute left-4 top-4 flex items-center gap-3 rounded-2xl border border-white/30 bg-white/90 px-3 py-2 shadow-sm backdrop-blur-sm">
+          <SchoolLogoMark
+            school={school}
+            imageClassName="h-10 w-10 shrink-0 rounded-xl object-cover"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mauve-500 text-sm font-bold text-white"
+            priority
+          />
+          <div>
+            <p className="text-sm font-semibold text-slate-900">{school.name}</p>
+            {heroSlides[0]?.title ? (
+              <p className="text-xs text-slate-600">{heroSlides[0].title}</p>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="motion-card aspect-[4/3] overflow-hidden rounded-3xl border border-mauve-200 bg-gradient-to-br from-mauve-300 via-mauve-400 to-mauve-500 shadow-lg">
+      <div className="flex h-full flex-col items-center justify-center px-6 text-center text-white">
+        {school.logoUrl ? (
+          <SchoolImage
+            src={school.logoUrl}
+            alt={`${school.name} logo`}
+            className="mb-4 max-h-32 max-w-[80%] rounded-2xl bg-white/10 object-contain p-3"
+            priority
+            fallback={
+              <span className="text-5xl font-bold opacity-90 sm:text-6xl">
+                {school.initials}
+              </span>
+            }
+          />
+        ) : (
+          <span className="text-5xl font-bold opacity-90 sm:text-6xl">
+            {school.initials}
+          </span>
+        )}
+        <p className="mt-4 text-lg font-semibold sm:text-xl">{school.name}</p>
+        <p className="mt-2 max-w-xs text-sm text-mauve-50 sm:text-base">
+          Upload hero photos in admin to show a rotating carousel here.
+        </p>
+      </div>
+    </div>
   );
 }

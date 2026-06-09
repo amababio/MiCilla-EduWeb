@@ -9,6 +9,10 @@ import { getAnnouncementCategoryLabel } from "@/lib/announcements";
 import { getDownloadCategoryLabel } from "@/lib/downloads";
 import { getRoutineLevelLabel, getWeekDayLabel } from "@/lib/schedule";
 import {
+  getCarouselPhotos,
+  getHomepageGalleryCategories,
+} from "@/lib/gallery-categories";
+import {
   defaultNavLinks,
   type AboutValue,
   type PublicSchoolData,
@@ -33,7 +37,10 @@ export async function getPublicSchoolData(
         orderBy: { sortOrder: "asc" },
       },
       galleryImages: {
-        where: { isFeatured: true },
+        orderBy: { sortOrder: "asc" },
+      },
+      heroSlides: {
+        where: { isActive: true },
         orderBy: { sortOrder: "asc" },
       },
       achievements: {
@@ -121,7 +128,18 @@ export async function getPublicSchoolData(
     ? defaultNavLinks
     : defaultNavLinks.filter((link) => link.href !== "#schedule");
 
+  const galleryCategories = getHomepageGalleryCategories(
+    school.galleryImages,
+  ).map((group) => ({
+    category: group.category,
+    slug: group.slug,
+    accent: group.accentClass,
+    photoCount: group.publishedPhotos.length,
+    photos: getCarouselPhotos(group),
+  }));
+
   return {
+    slug: school.slug,
     name: school.name,
     initials: school.initials,
     tagline: school.tagline,
@@ -137,6 +155,10 @@ export async function getPublicSchoolData(
     heroDescription: settings.heroDescription,
     heroCtaPrimary: settings.heroCtaPrimary,
     heroCtaSecondary: settings.heroCtaSecondary,
+    heroSlides: school.heroSlides.map((slide) => ({
+      imageUrl: slide.imageUrl,
+      title: slide.title,
+    })),
     admissions: {
       headline: settings.admissionsHeadline,
       description: settings.admissionsDescription,
@@ -153,12 +175,7 @@ export async function getPublicSchoolData(
     })),
     whyChooseUs: parseJsonArray<string>(settings.whyChooseUs),
     whyChooseUsIntro: settings.whyChooseUsIntro,
-    gallery: school.galleryImages.map((image) => ({
-      title: image.title,
-      category: image.category,
-      accent: image.accentClass,
-      imageUrl: image.imageUrl,
-    })),
+    galleryCategories,
     achievements: {
       subtitle: settings.achievementsSubtitle,
       note: settings.achievementsNote,

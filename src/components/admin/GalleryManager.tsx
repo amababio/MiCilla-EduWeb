@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useEffect, useState, useTransition } from "react";
+import { useActionState, useEffect, useMemo, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
+  bulkCreateGalleryPhotosFormAction,
   createGalleryPhotoFormAction,
   deleteGalleryPhotoAction,
   moveGalleryPhotoAction,
@@ -12,6 +13,7 @@ import {
   type GalleryFormState,
 } from "@/lib/actions/gallery";
 import { galleryAccentPresets, getAccentLabel } from "@/lib/gallery";
+import { IMAGE_ACCEPT, IMAGE_ACCEPT_LABEL } from "@/lib/image-upload-shared";
 import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 type GalleryManagerProps = {
@@ -26,15 +28,36 @@ export function GalleryManager({ photos }: GalleryManagerProps) {
     createGalleryPhotoFormAction,
     initialFormState,
   );
+  const [bulkState, bulkAction, isBulkUploading] = useActionState(
+    bulkCreateGalleryPhotosFormAction,
+    initialFormState,
+  );
   const [editingId, setEditingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState("");
   const [isPending, startTransition] = useTransition();
 
+  const categorySuggestions = useMemo(() => {
+    return [...new Set(photos.map((photo) => photo.category.trim()).filter(Boolean))].sort();
+  }, [photos]);
+
+  const groupedPhotos = useMemo(() => {
+    const groups = new Map<string, GalleryPhotoAdminItem[]>();
+
+    for (const photo of photos) {
+      const category = photo.category.trim() || "General";
+      const existing = groups.get(category) ?? [];
+      existing.push(photo);
+      groups.set(category, existing);
+    }
+
+    return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b));
+  }, [photos]);
+
   useEffect(() => {
-    if (createState.message) {
+    if (createState.message || bulkState.message) {
       router.refresh();
     }
-  }, [createState.message, router]);
+  }, [createState.message, bulkState.message, router]);
 
   function refreshPage() {
     router.refresh();
@@ -56,14 +79,86 @@ export function GalleryManager({ photos }: GalleryManagerProps) {
   return (
     <div className="space-y-8">
       <section className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-900">Add a Photo</h2>
+        <h2 className="text-lg font-semibold text-slate-900">Bulk Upload to a Category</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Upload a photo from your phone or computer. You can also save a colored
-          placeholder until a real photo is ready.
+          Upload many photos at once for one album, such as Graduation or Sports Day.
+          Parents will see the category on the homepage and can open the full album.
+        </p>
+
+        <form action={bulkAction} className="mt-6 space-y-5">
+          <Field
+            id="bulk-category"
+            label="Category"
+            name="category"
+            placeholder="e.g. Graduation"
+            list="gallery-category-suggestions"
+            required
+          />
+          <datalist id="gallery-category-suggestions">
+            {categorySuggestions.map((category) => (
+              <option key={category} value={category} />
+            ))}
+          </datalist>
+          <div>
+            <label
+              htmlFor="bulk-photos"
+              className="block text-sm font-medium text-slate-700"
+            >
+              Upload Photos
+            </label>
+            <input
+              id="bulk-photos"
+              name="photos"
+              type="file"
+              accept={IMAGE_ACCEPT}
+              multiple
+              required
+              className="mt-2 block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 file:bg-mauve-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-mauve-700 hover:file:bg-mauve-200"
+            />
+            <p className="mt-1 text-xs text-slate-500">
+              Choose up to 50 photos. {IMAGE_ACCEPT_LABEL} up to 10 MB each.
+            </p>
+          </div>
+          <SelectField
+            id="bulk-accentClass"
+            label="Placeholder Color"
+            name="accentClass"
+            defaultValue={galleryAccentPresets[1].value}
+            options={galleryAccentPresets.map((preset) => ({
+              value: preset.value,
+              label: preset.label,
+            }))}
+            hint="Used only if a photo is saved without an image."
+          />
+          <FeaturedCheckbox id="bulk-featured" defaultChecked />
+          {bulkState.error ? (
+            <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
+              {bulkState.error}
+            </p>
+          ) : null}
+          {bulkState.message ? (
+            <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              {bulkState.message}
+            </p>
+          ) : null}
+          <button
+            type="submit"
+            disabled={isBulkUploading}
+            className="rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-mauve-600 disabled:opacity-60"
+          >
+            {isBulkUploading ? "Uploading..." : "Upload Album Photos"}
+          </button>
+        </form>
+      </section>
+
+      <section className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-900">Add One Photo</h2>
+        <p className="mt-1 text-sm text-slate-600">
+          Add a single photo with its own title and category.
         </p>
 
         <form action={createAction} className="mt-6 space-y-5">
-          <PhotoFields idPrefix="new" defaultFeatured />
+          <PhotoFields idPrefix="new" defaultFeatured listId="gallery-category-suggestions" />
           {createState.error ? (
             <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
               {createState.error}
@@ -84,12 +179,12 @@ export function GalleryManager({ photos }: GalleryManagerProps) {
         </form>
       </section>
 
-      <section className="space-y-4">
+      <section className="space-y-6">
         <div>
-          <h2 className="text-lg font-semibold text-slate-900">Your Photos</h2>
+          <h2 className="text-lg font-semibold text-slate-900">Your Photo Library</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Featured photos appear in the homepage gallery preview. Others stay
-            saved here for later.
+            Photos are grouped by category. Featured categories appear on the homepage
+            with rotating previews. Parents can tap a category to open the full album.
           </p>
         </div>
 
@@ -102,44 +197,70 @@ export function GalleryManager({ photos }: GalleryManagerProps) {
         {photos.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-mauve-200 bg-white p-8 text-center">
             <p className="text-sm text-slate-600">
-              No photos yet. Add your first photo above.
+              No photos yet. Bulk upload a category above or add one photo at a time.
             </p>
           </div>
         ) : (
-          photos.map((photo, index) => (
-            <PhotoCard
-              key={photo.id}
-              photo={photo}
-              isFirst={index === 0}
-              isLast={index === photos.length - 1}
-              isEditing={editingId === photo.id}
-              isPending={isPending}
-              onEdit={() => setEditingId(photo.id)}
-              onCancelEdit={() => setEditingId(null)}
-              onDelete={() => {
-                if (
-                  !window.confirm(`Remove "${photo.title}" from your photos?`)
-                ) {
-                  return;
-                }
-                runAction(() => deleteGalleryPhotoAction(photo.id));
-              }}
-              onToggleFeatured={() =>
-                runAction(() =>
-                  setGalleryPhotoFeaturedAction(photo.id, !photo.isFeatured),
-                )
-              }
-              onMoveUp={() =>
-                runAction(() => moveGalleryPhotoAction(photo.id, "up"))
-              }
-              onMoveDown={() =>
-                runAction(() => moveGalleryPhotoAction(photo.id, "down"))
-              }
-              onSaved={() => {
-                setEditingId(null);
-                refreshPage();
-              }}
-            />
+          groupedPhotos.map(([category, categoryPhotos]) => (
+            <div key={category} className="space-y-4">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h3 className="text-base font-semibold text-slate-900">{category}</h3>
+                  <p className="mt-1 text-sm text-slate-600">
+                    {categoryPhotos.length} photo
+                    {categoryPhotos.length === 1 ? "" : "s"} ·{" "}
+                    {
+                      categoryPhotos.filter(
+                        (photo) => photo.isFeatured && photo.imageUrl,
+                      ).length
+                    }{" "}
+                    featured on homepage
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {categoryPhotos.map((photo) => {
+                  const index = photos.findIndex((item) => item.id === photo.id);
+
+                  return (
+                    <PhotoCard
+                      key={photo.id}
+                      photo={photo}
+                      isFirst={index === 0}
+                      isLast={index === photos.length - 1}
+                      isEditing={editingId === photo.id}
+                      isPending={isPending}
+                      onEdit={() => setEditingId(photo.id)}
+                      onCancelEdit={() => setEditingId(null)}
+                      onDelete={() => {
+                        if (
+                          !window.confirm(`Remove "${photo.title}" from your photos?`)
+                        ) {
+                          return;
+                        }
+                        runAction(() => deleteGalleryPhotoAction(photo.id));
+                      }}
+                      onToggleFeatured={() =>
+                        runAction(() =>
+                          setGalleryPhotoFeaturedAction(photo.id, !photo.isFeatured),
+                        )
+                      }
+                      onMoveUp={() =>
+                        runAction(() => moveGalleryPhotoAction(photo.id, "up"))
+                      }
+                      onMoveDown={() =>
+                        runAction(() => moveGalleryPhotoAction(photo.id, "down"))
+                      }
+                      onSaved={() => {
+                        setEditingId(null);
+                        refreshPage();
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </div>
           ))
         )}
       </section>
@@ -185,7 +306,7 @@ function PhotoCard({
     if (editState.message) {
       onSaved();
     }
-  }, [editState.message, onSaved]);
+  }, [editState.message]);
 
   if (isEditing) {
     return (
@@ -200,6 +321,7 @@ function PhotoCard({
             currentImageAlt={photo.title}
             defaultAccentClass={photo.accentClass}
             defaultFeatured={photo.isFeatured}
+            listId="gallery-category-suggestions"
           />
           {editState.error ? (
             <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -239,9 +361,6 @@ function PhotoCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <h3 className="text-lg font-semibold text-slate-900">{photo.title}</h3>
-            <span className="rounded-full bg-mauve-100 px-2.5 py-0.5 text-xs font-semibold text-mauve-800">
-              {photo.category}
-            </span>
             <span
               className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
                 photo.isFeatured
@@ -249,7 +368,7 @@ function PhotoCard({
                   : "bg-slate-100 text-slate-600"
               }`}
             >
-              {photo.isFeatured ? "On homepage" : "Saved only"}
+              {photo.isFeatured ? "On homepage" : "Library only"}
             </span>
           </div>
           <p className="mt-2 text-sm text-slate-600">
@@ -311,6 +430,7 @@ type PhotoFieldsProps = {
   currentImageAlt?: string;
   defaultAccentClass?: string;
   defaultFeatured?: boolean;
+  listId?: string;
 };
 
 function PhotoFields({
@@ -321,6 +441,7 @@ function PhotoFields({
   currentImageAlt = "Current photo",
   defaultAccentClass = galleryAccentPresets[1].value,
   defaultFeatured = false,
+  listId,
 }: PhotoFieldsProps) {
   return (
     <>
@@ -338,6 +459,7 @@ function PhotoFields({
         name="category"
         defaultValue={defaultCategory}
         placeholder="e.g. Sports, Events, Academics"
+        list={listId}
         required
       />
       <ImageUploadField
@@ -356,16 +478,32 @@ function PhotoFields({
         }))}
         hint="Used when no photo is uploaded."
       />
-      <label className="flex items-center gap-3 text-sm text-slate-700">
-        <input
-          type="checkbox"
-          name="isFeatured"
-          defaultChecked={defaultFeatured}
-          className="h-4 w-4 rounded border-mauve-300 text-mauve-600 focus:ring-mauve-300"
-        />
-        Show this photo on the public homepage gallery
-      </label>
+      <FeaturedCheckbox
+        id={`${idPrefix}-featured`}
+        defaultChecked={defaultFeatured}
+      />
     </>
+  );
+}
+
+function FeaturedCheckbox({
+  id,
+  defaultChecked,
+}: {
+  id: string;
+  defaultChecked?: boolean;
+}) {
+  return (
+    <label htmlFor={id} className="flex items-center gap-3 text-sm text-slate-700">
+      <input
+        id={id}
+        type="checkbox"
+        name="isFeatured"
+        defaultChecked={defaultChecked}
+        className="h-4 w-4 rounded border-mauve-300 text-mauve-600 focus:ring-mauve-300"
+      />
+      Show this photo in the homepage category preview
+    </label>
   );
 }
 
@@ -407,6 +545,7 @@ type FieldProps = {
   placeholder?: string;
   required?: boolean;
   hint?: string;
+  list?: string;
 };
 
 function Field({
@@ -417,6 +556,7 @@ function Field({
   placeholder,
   required,
   hint,
+  list,
 }: FieldProps) {
   return (
     <div>
@@ -430,6 +570,7 @@ function Field({
         defaultValue={defaultValue}
         placeholder={placeholder}
         required={required}
+        list={list}
         className="mt-2 w-full rounded-xl border border-mauve-200 px-4 py-3 text-sm text-slate-900 outline-none ring-mauve-300 focus:ring-2"
       />
       {hint ? <p className="mt-1 text-xs text-slate-500">{hint}</p> : null}

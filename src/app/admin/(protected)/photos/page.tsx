@@ -17,9 +17,9 @@ export default async function PhotosPage() {
       <div>
         <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Photos</h1>
         <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600 sm:text-base">
-          Manage school photos for your public website gallery. Upload photos,
-          organize categories, choose featured photos, and reorder how they
-          appear.
+          Build photo albums by category. Bulk upload graduation or sports photos,
+          feature categories for the homepage preview, and let parents open the full
+          album from your public website.
         </p>
       </div>
 

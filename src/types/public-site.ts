@@ -10,6 +10,14 @@ export type GalleryItem = {
   imageUrl: string | null;
 };
 
+export type GalleryCategoryPreview = {
+  category: string;
+  slug: string;
+  accent: string;
+  photoCount: number;
+  photos: { imageUrl: string; title: string }[];
+};
+
 export type AchievementCard = {
   title: string;
   description: string;
@@ -79,12 +87,18 @@ export type ProgramItem = {
   imageUrl: string | null;
 };
 
+export type HeroSlideItem = {
+  imageUrl: string;
+  title: string;
+};
+
 export type NavLink = {
   label: string;
   href: string;
 };
 
 export type PublicSchoolData = {
+  slug: string;
   name: string;
   initials: string;
   tagline: string;
@@ -100,6 +114,7 @@ export type PublicSchoolData = {
   heroDescription: string;
   heroCtaPrimary: string;
   heroCtaSecondary: string;
+  heroSlides: HeroSlideItem[];
   admissions: {
     headline: string;
     description: string;
@@ -112,7 +127,7 @@ export type PublicSchoolData = {
   programs: ProgramItem[];
   whyChooseUs: string[];
   whyChooseUsIntro: string;
-  gallery: GalleryItem[];
+  galleryCategories: GalleryCategoryPreview[];
   achievements: {
     subtitle: string;
     cards: AchievementCard[];

@@ -1,5 +1,7 @@
 import { redirect } from "next/navigation";
+import { HeroSlidesManager } from "@/components/admin/HeroSlidesManager";
 import { HomepageContentForm } from "@/components/admin/HomepageContentForm";
+import { getHeroSlidesForAdmin } from "@/lib/actions/hero-slides";
 import { getHomepageContentForAdmin } from "@/lib/actions/homepage-content";
 import { getAdminSession } from "@/lib/auth";
 
@@ -10,7 +12,10 @@ export default async function HomepageContentPage() {
     redirect("/admin/login");
   }
 
-  const content = await getHomepageContentForAdmin(session.schoolId);
+  const [content, heroSlides] = await Promise.all([
+    getHomepageContentForAdmin(session.schoolId),
+    getHeroSlidesForAdmin(session.schoolId),
+  ]);
 
   if (!content) {
     redirect("/admin/login");
@@ -28,6 +33,8 @@ export default async function HomepageContentPage() {
           homepage after you save.
         </p>
       </div>
+
+      <HeroSlidesManager slides={heroSlides} />
 
       <HomepageContentForm content={content} />
     </div>
