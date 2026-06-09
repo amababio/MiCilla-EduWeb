@@ -3,6 +3,7 @@ import {
   getAchievementDisplayLabel,
   getCategoryLabel,
 } from "@/lib/achievements";
+import { getAnnouncementCategoryLabel } from "@/lib/announcements";
 import {
   defaultNavLinks,
   type AboutValue,
@@ -110,6 +111,7 @@ export async function getPublicSchoolData(
     announcements: school.announcements.map((item) => ({
       title: item.title,
       category: item.category,
+      categoryLabel: getAnnouncementCategoryLabel(item.category),
       message: item.message,
       date: item.displayDate,
     })),

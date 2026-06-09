@@ -17,12 +17,12 @@ export function AnnouncementsPreview({ school }: AnnouncementsPreviewProps) {
         <div className="grid gap-4 lg:grid-cols-3">
           {school.announcements.map((item) => (
             <article
-              key={item.title}
+              key={`${item.title}-${item.category}`}
               className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm"
             >
               <div className="flex items-center justify-between gap-3">
                 <span className="rounded-full bg-mauve-200 px-3 py-1 text-xs font-semibold text-mauve-700">
-                  {item.category}
+                  {item.categoryLabel}
                 </span>
                 <time className="text-xs text-slate-400">{item.date}</time>
               </div>

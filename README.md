@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 9 — Excellence & Achievements Management
+Phase 10 — Announcements and Events
 
 ## Stack
 
@@ -91,6 +91,12 @@ Admins can add photo links, set categories, mark featured photos, reorder, and r
 - Edit page: [http://localhost:3000/admin/achievements](http://localhost:3000/admin/achievements)
 
 Admins can add BECE results, competitions, awards, and innovation entries. Privacy display options control how student names appear publicly. Published achievements update the homepage Excellence section.
+
+## Notices (Phase 10)
+
+- Edit page: [http://localhost:3000/admin/notices](http://localhost:3000/admin/notices)
+
+Admins can add, edit, publish, reorder, and remove school announcements. Categories include admissions, events, academics, PTA, and more. Published notices appear on the public homepage.
 
 Default seeded admin comes from your `.env` file:
 

@@ -21,6 +21,7 @@ export type AchievementCard = {
 export type AnnouncementItem = {
   title: string;
   category: string;
+  categoryLabel: string;
   message: string;
   date: string;
 };

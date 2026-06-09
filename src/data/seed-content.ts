@@ -129,21 +129,21 @@ export const redemptionSchoolSeed = {
   announcements: [
     {
       title: "Admissions open for 2026/2027 academic year",
-      category: "Admissions",
+      category: "admissions",
       message:
         "New and returning families are welcome to visit the school office for admission enquiries and placement information.",
       displayDate: "March 2026",
     },
     {
       title: "PTA meeting scheduled for Friday",
-      category: "Notice",
+      category: "pta",
       message:
         "All parents and guardians are invited to attend the PTA meeting at 4:00 PM in the school hall.",
       displayDate: "March 2026",
     },
     {
       title: "End-of-term assessment timetable coming soon",
-      category: "Academics",
+      category: "academics",
       message:
         "Assessment dates for all levels will be shared with parents through class teachers and the school office.",
       displayDate: "April 2026",
