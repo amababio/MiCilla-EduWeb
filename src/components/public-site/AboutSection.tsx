@@ -1,17 +1,21 @@
-import { demoSchool } from "@/data/demoSchool";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function AboutSection() {
+type AboutSectionProps = {
+  school: PublicSchoolData;
+};
+
+export function AboutSection({ school }: AboutSectionProps) {
   return (
     <section id="about" className="bg-mauve-50 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           title="About Our School"
-          subtitle={demoSchool.about.description}
+          subtitle={school.about.description}
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {demoSchool.about.values.map((value) => (
+          {school.about.values.map((value) => (
             <article
               key={value.title}
               className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm"

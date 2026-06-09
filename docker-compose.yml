@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: micilla-eduweb-db
+    restart: unless-stopped
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: micilla
+      POSTGRES_PASSWORD: micilla
+      POSTGRES_DB: micilla_eduweb
+    volumes:
+      - micilla_eduweb_pgdata:/var/lib/postgresql/data
+
+volumes:
+  micilla_eduweb_pgdata:

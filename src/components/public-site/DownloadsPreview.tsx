@@ -1,7 +1,11 @@
-import { demoSchool } from "@/data/demoSchool";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function DownloadsPreview() {
+type DownloadsPreviewProps = {
+  school: PublicSchoolData;
+};
+
+export function DownloadsPreview({ school }: DownloadsPreviewProps) {
   return (
     <section className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -11,7 +15,7 @@ export function DownloadsPreview() {
         />
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {demoSchool.downloads.map((item) => (
+          {school.downloads.map((item) => (
             <article
               key={item.title}
               className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center sm:gap-4"

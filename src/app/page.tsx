@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { Header } from "@/components/public-site/Header";
 import { HeroSection } from "@/components/public-site/HeroSection";
 import { AdmissionsSection } from "@/components/public-site/AdmissionsSection";
@@ -10,24 +11,33 @@ import { AnnouncementsPreview } from "@/components/public-site/AnnouncementsPrev
 import { DownloadsPreview } from "@/components/public-site/DownloadsPreview";
 import { ContactSection } from "@/components/public-site/ContactSection";
 import { Footer } from "@/components/public-site/Footer";
+import { getPublicSchoolData } from "@/lib/get-public-school-data";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const school = await getPublicSchoolData();
+
+  if (!school) {
+    notFound();
+  }
+
   return (
     <>
-      <Header />
+      <Header school={school} />
       <main>
-        <HeroSection />
-        <AdmissionsSection />
-        <AboutSection />
-        <ProgramsSection />
-        <WhyChooseUsSection />
-        <GalleryPreview />
-        <AchievementsPreview />
-        <AnnouncementsPreview />
-        <DownloadsPreview />
-        <ContactSection />
+        <HeroSection school={school} />
+        <AdmissionsSection school={school} />
+        <AboutSection school={school} />
+        <ProgramsSection school={school} />
+        <WhyChooseUsSection school={school} />
+        <GalleryPreview school={school} />
+        <AchievementsPreview school={school} />
+        <AnnouncementsPreview school={school} />
+        <DownloadsPreview school={school} />
+        <ContactSection school={school} />
       </main>
-      <Footer />
+      <Footer school={school} />
     </>
   );
 }

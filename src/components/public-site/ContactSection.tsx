@@ -1,12 +1,16 @@
 import {
-  demoSchool,
   formatWhatsAppDisplay,
   phoneToTel,
   phoneToWhatsApp,
-} from "@/data/demoSchool";
+} from "@/lib/phone";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function ContactSection() {
+type ContactSectionProps = {
+  school: PublicSchoolData;
+};
+
+export function ContactSection({ school }: ContactSectionProps) {
   return (
     <section
       id="contact"
@@ -14,8 +18,8 @@ export function ContactSection() {
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          title={demoSchool.contact.headline}
-          subtitle={demoSchool.contact.description}
+          title={school.contact.headline}
+          subtitle={school.contact.description}
         />
 
         <div className="grid gap-6 lg:grid-cols-2">
@@ -28,10 +32,10 @@ export function ContactSection() {
                 <dt className="font-semibold text-mauve-700">Phone</dt>
                 <dd className="mt-1">
                   <a
-                    href={phoneToTel(demoSchool.phone)}
+                    href={phoneToTel(school.phone)}
                     className="text-mauve-600 hover:underline"
                   >
-                    {demoSchool.phone}
+                    {school.phone}
                   </a>
                 </dd>
               </div>
@@ -39,37 +43,37 @@ export function ContactSection() {
                 <dt className="font-semibold text-mauve-700">WhatsApp</dt>
                 <dd className="mt-1">
                   <a
-                    href={phoneToWhatsApp(demoSchool.whatsapp)}
+                    href={phoneToWhatsApp(school.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-mauve-600 hover:underline"
                   >
-                    {formatWhatsAppDisplay(demoSchool.whatsapp)}
+                    {formatWhatsAppDisplay(school.whatsapp)}
                   </a>
                 </dd>
               </div>
               <div>
                 <dt className="font-semibold text-mauve-700">P. O. Box</dt>
-                <dd className="mt-1 text-slate-600">{demoSchool.poBox}</dd>
+                <dd className="mt-1 text-slate-600">{school.poBox}</dd>
               </div>
               <div>
                 <dt className="font-semibold text-mauve-700">Email</dt>
                 <dd className="mt-1">
                   <a
-                    href={`mailto:${demoSchool.email}`}
+                    href={`mailto:${school.email}`}
                     className="text-mauve-600 hover:underline"
                   >
-                    {demoSchool.email}
+                    {school.email}
                   </a>
                 </dd>
               </div>
               <div>
                 <dt className="font-semibold text-mauve-700">Location</dt>
-                <dd className="mt-1 text-slate-600">{demoSchool.location}</dd>
+                <dd className="mt-1 text-slate-600">{school.location}</dd>
               </div>
               <div>
                 <dt className="font-semibold text-mauve-700">Office Hours</dt>
-                <dd className="mt-1 text-slate-600">{demoSchool.officeHours}</dd>
+                <dd className="mt-1 text-slate-600">{school.officeHours}</dd>
               </div>
             </dl>
 
@@ -94,7 +98,7 @@ export function ContactSection() {
               placement availability.
             </p>
             <a
-              href={phoneToWhatsApp(demoSchool.whatsapp)}
+              href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               className="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-mauve-700 transition hover:bg-mauve-50"
@@ -102,10 +106,10 @@ export function ContactSection() {
               Start WhatsApp Chat
             </a>
             <a
-              href={phoneToTel(demoSchool.phone)}
+              href={phoneToTel(school.phone)}
               className="mt-3 inline-flex items-center justify-center rounded-full border-2 border-white/60 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
             >
-              Call {demoSchool.phone}
+              Call {school.phone}
             </a>
           </div>
         </div>

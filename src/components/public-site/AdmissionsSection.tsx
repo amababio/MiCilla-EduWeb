@@ -1,13 +1,18 @@
-import { demoSchool, phoneToTel, phoneToWhatsApp } from "@/data/demoSchool";
+import { phoneToTel, phoneToWhatsApp } from "@/lib/phone";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function AdmissionsSection() {
+type AdmissionsSectionProps = {
+  school: PublicSchoolData;
+};
+
+export function AdmissionsSection({ school }: AdmissionsSectionProps) {
   return (
     <section id="admissions" className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
-          title={demoSchool.admissions.headline}
-          subtitle={demoSchool.admissions.description}
+          title={school.admissions.headline}
+          subtitle={school.admissions.description}
         />
 
         <div className="rounded-2xl border border-mauve-200 bg-mauve-100/70 p-6 sm:p-8">
@@ -15,7 +20,7 @@ export function AdmissionsSection() {
             Available Levels
           </h3>
           <div className="mt-4 flex flex-wrap gap-2">
-            {demoSchool.admissions.levels.map((level) => (
+            {school.admissions.levels.map((level) => (
               <span
                 key={level}
                 className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-mauve-200"
@@ -34,13 +39,13 @@ export function AdmissionsSection() {
               Download Admission Form (Demo)
             </button>
             <a
-              href={phoneToTel(demoSchool.phone)}
+              href={phoneToTel(school.phone)}
               className="inline-flex items-center justify-center rounded-full border-2 border-mauve-300 bg-white px-6 py-3 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50"
             >
               Call Admissions Office
             </a>
             <a
-              href={phoneToWhatsApp(demoSchool.whatsapp)}
+              href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"

@@ -1,7 +1,11 @@
-import { demoSchool } from "@/data/demoSchool";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function ProgramsSection() {
+type ProgramsSectionProps = {
+  school: PublicSchoolData;
+};
+
+export function ProgramsSection({ school }: ProgramsSectionProps) {
   return (
     <section id="programs" className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -11,7 +15,7 @@ export function ProgramsSection() {
         />
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {demoSchool.programs.map((program) => (
+          {school.programs.map((program) => (
             <article
               key={program.name}
               className="flex flex-col rounded-2xl border border-mauve-100 bg-gradient-to-b from-white to-mauve-50 p-6 shadow-sm transition hover:border-mauve-300 hover:shadow-md"

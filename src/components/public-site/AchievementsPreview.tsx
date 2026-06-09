@@ -1,17 +1,21 @@
-import { demoSchool } from "@/data/demoSchool";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function AchievementsPreview() {
+type AchievementsPreviewProps = {
+  school: PublicSchoolData;
+};
+
+export function AchievementsPreview({ school }: AchievementsPreviewProps) {
   return (
     <section id="achievements" className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <SectionHeading
           title="Excellence & Achievements"
-          subtitle={demoSchool.achievements.subtitle}
+          subtitle={school.achievements.subtitle}
         />
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {demoSchool.achievements.cards.map((card) => (
+          {school.achievements.cards.map((card) => (
             <article
               key={card.title}
               className="rounded-2xl border border-mauve-200 bg-gradient-to-b from-mauve-100 to-white p-6 shadow-sm"
@@ -30,7 +34,7 @@ export function AchievementsPreview() {
         </div>
 
         <p className="mt-8 rounded-xl border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-center text-sm text-slate-500">
-          {demoSchool.achievements.note}
+          {school.achievements.note}
         </p>
       </div>
     </section>

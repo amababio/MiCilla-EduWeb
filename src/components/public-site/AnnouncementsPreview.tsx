@@ -1,7 +1,11 @@
-import { demoSchool } from "@/data/demoSchool";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function AnnouncementsPreview() {
+type AnnouncementsPreviewProps = {
+  school: PublicSchoolData;
+};
+
+export function AnnouncementsPreview({ school }: AnnouncementsPreviewProps) {
   return (
     <section className="bg-mauve-50 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -11,7 +15,7 @@ export function AnnouncementsPreview() {
         />
 
         <div className="grid gap-4 lg:grid-cols-3">
-          {demoSchool.announcements.map((item) => (
+          {school.announcements.map((item) => (
             <article
               key={item.title}
               className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm"

@@ -1,7 +1,11 @@
-import { demoSchool } from "@/data/demoSchool";
+import type { PublicSchoolData } from "@/types/public-site";
 import { SectionHeading } from "@/components/shared/SectionHeading";
 
-export function GalleryPreview() {
+type GalleryPreviewProps = {
+  school: PublicSchoolData;
+};
+
+export function GalleryPreview({ school }: GalleryPreviewProps) {
   return (
     <section id="gallery" className="bg-mauve-50 py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -11,7 +15,7 @@ export function GalleryPreview() {
         />
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {demoSchool.gallery.map((item) => (
+          {school.gallery.map((item) => (
             <article
               key={item.title}
               className="group overflow-hidden rounded-2xl border border-mauve-200 bg-white shadow-sm"

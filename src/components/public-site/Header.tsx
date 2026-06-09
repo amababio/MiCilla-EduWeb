@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { demoSchool, phoneToTel, phoneToWhatsApp } from "@/data/demoSchool";
+import { phoneToTel, phoneToWhatsApp } from "@/lib/phone";
+import type { PublicSchoolData } from "@/types/public-site";
 
-export function Header() {
+type HeaderProps = {
+  school: PublicSchoolData;
+};
+
+export function Header({ school }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
@@ -15,15 +20,15 @@ export function Header() {
           onClick={() => setMenuOpen(false)}
         >
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-mauve-500 text-sm font-bold text-white shadow-sm">
-            {demoSchool.initials}
+            {school.initials}
           </span>
           <span className="truncate text-sm font-semibold text-slate-900 sm:text-base">
-            {demoSchool.name}
+            {school.name}
           </span>
         </a>
 
         <nav className="hidden items-center gap-6 lg:flex">
-          {demoSchool.navLinks.map((link) => (
+          {school.navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
@@ -36,13 +41,13 @@ export function Header() {
 
         <div className="hidden items-center gap-2 sm:flex">
           <a
-            href={phoneToTel(demoSchool.phone)}
+            href={phoneToTel(school.phone)}
             className="rounded-full border border-mauve-300 px-3 py-1.5 text-xs font-semibold text-mauve-700 transition hover:bg-mauve-50 sm:px-4 sm:text-sm"
           >
             Call
           </a>
           <a
-            href={phoneToWhatsApp(demoSchool.whatsapp)}
+            href={phoneToWhatsApp(school.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full bg-mauve-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-mauve-600 sm:px-4 sm:text-sm"
@@ -88,7 +93,7 @@ export function Header() {
       {menuOpen ? (
         <div className="border-t border-mauve-100 bg-white px-4 py-4 lg:hidden">
           <nav className="flex flex-col gap-3">
-            {demoSchool.navLinks.map((link) => (
+            {school.navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -101,13 +106,13 @@ export function Header() {
           </nav>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <a
-              href={phoneToTel(demoSchool.phone)}
+              href={phoneToTel(school.phone)}
               className="rounded-full border border-mauve-300 px-4 py-2 text-center text-sm font-semibold text-mauve-700"
             >
-              Call {demoSchool.phone}
+              Call {school.phone}
             </a>
             <a
-              href={phoneToWhatsApp(demoSchool.whatsapp)}
+              href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full bg-mauve-500 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm"

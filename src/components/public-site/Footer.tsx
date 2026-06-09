@@ -1,11 +1,15 @@
 import {
-  demoSchool,
   formatWhatsAppDisplay,
   phoneToTel,
   phoneToWhatsApp,
-} from "@/data/demoSchool";
+} from "@/lib/phone";
+import type { PublicSchoolData } from "@/types/public-site";
 
-export function Footer() {
+type FooterProps = {
+  school: PublicSchoolData;
+};
+
+export function Footer({ school }: FooterProps) {
   return (
     <footer className="border-t border-mauve-300 bg-gradient-to-r from-mauve-500 to-mauve-600 text-white">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
@@ -13,15 +17,15 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-3">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-sm font-bold text-mauve-600">
-                {demoSchool.initials}
+                {school.initials}
               </span>
               <div>
-                <p className="font-semibold text-white">{demoSchool.name}</p>
-                <p className="text-sm text-white/80">{demoSchool.motto}</p>
+                <p className="font-semibold text-white">{school.name}</p>
+                <p className="text-sm text-white/80">{school.motto}</p>
               </div>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-white/90">
-              {demoSchool.tagline}. {demoSchool.poBox}, {demoSchool.location}.
+              {school.tagline}. {school.poBox}, {school.location}.
             </p>
           </div>
 
@@ -30,7 +34,7 @@ export function Footer() {
               Quick Links
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-white/90">
-              {demoSchool.navLinks.map((link) => (
+              {school.navLinks.map((link) => (
                 <li key={link.href}>
                   <a href={link.href} className="transition hover:text-white">
                     {link.label}
@@ -46,37 +50,37 @@ export function Footer() {
             </h3>
             <ul className="mt-4 space-y-2 text-sm text-white/90">
               <li>
-                <a href={phoneToTel(demoSchool.phone)} className="hover:text-white">
-                  {demoSchool.phone}
+                <a href={phoneToTel(school.phone)} className="hover:text-white">
+                  {school.phone}
                 </a>
               </li>
               <li>
                 <a
-                  href={phoneToWhatsApp(demoSchool.whatsapp)}
+                  href={phoneToWhatsApp(school.whatsapp)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-white"
                 >
-                  WhatsApp: {formatWhatsAppDisplay(demoSchool.whatsapp)}
+                  WhatsApp: {formatWhatsAppDisplay(school.whatsapp)}
                 </a>
               </li>
               <li>
-                <a href={`mailto:${demoSchool.email}`} className="hover:text-white">
-                  {demoSchool.email}
+                <a href={`mailto:${school.email}`} className="hover:text-white">
+                  {school.email}
                 </a>
               </li>
-              <li>{demoSchool.poBox}</li>
-              <li>{demoSchool.location}</li>
+              <li>{school.poBox}</li>
+              <li>{school.location}</li>
             </ul>
           </div>
         </div>
 
         <div className="mt-10 border-t border-white/25 pt-6 text-center text-sm text-white/80">
           <p>
-            © {new Date().getFullYear()} {demoSchool.name}. All rights reserved.
+            © {new Date().getFullYear()} {school.name}. All rights reserved.
           </p>
           <p className="mt-2 font-medium text-white/90">
-            {demoSchool.footer.poweredBy}
+            {school.footer.poweredBy}
           </p>
         </div>
       </div>

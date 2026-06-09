@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model School {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  initials    String
+  tagline     String
+  motto       String
+  poBox       String
+  location    String
+  phone       String
+  whatsapp    String
+  email       String
+  officeHours String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  websiteSettings WebsiteSettings?
+  programs        Program[]
+  galleryImages   GalleryImage[]
+  achievements    Achievement[]
+  announcements   Announcement[]
+  downloads       Download[]
+}
+
+model WebsiteSettings {
+  id                    String   @id @default(cuid())
+  schoolId              String   @unique
+  school                School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  heroDescription       String
+  admissionsHeadline    String
+  admissionsDescription String
+  admissionLevels       Json
+  aboutDescription      String
+  aboutValues           Json
+  whyChooseUs           Json
+  achievementsSubtitle  String
+  achievementsNote      String
+  contactHeadline       String
+  contactDescription    String
+  poweredByFooter       String
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model Program {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name        String
+  description String
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model GalleryImage {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  accentClass String
+  imageUrl    String?
+  sortOrder   Int      @default(0)
+  isFeatured  Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  category    String   @default("preview")
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  category    String
+  message     String
+  displayDate String
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model Download {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  description String
+  fileUrl     String?
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
