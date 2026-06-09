@@ -175,6 +175,86 @@ export const redemptionSchoolSeed = {
       fileUrl: null,
     },
   ],
+  schedule: {
+    classes: ["Primary 4", "JHS 1"],
+    activities: [
+      { name: "Mathematics", category: "subject" },
+      { name: "English Language", category: "subject" },
+      { name: "Break", category: "break" },
+      { name: "Morning Assembly", category: "assembly" },
+    ],
+    classTimetable: [
+      {
+        className: "Primary 4",
+        dayOfWeek: "monday",
+        periodLabel: "Period 1",
+        startTime: "8:00 AM",
+        endTime: "8:45 AM",
+        activityName: "Mathematics",
+      },
+      {
+        className: "Primary 4",
+        dayOfWeek: "monday",
+        periodLabel: "Period 2",
+        startTime: "8:45 AM",
+        endTime: "9:30 AM",
+        activityName: "English Language",
+      },
+      {
+        className: "JHS 1",
+        dayOfWeek: "tuesday",
+        periodLabel: "Period 1",
+        startTime: "8:00 AM",
+        endTime: "9:00 AM",
+        activityName: "Mathematics",
+      },
+    ],
+    examTimetable: [
+      {
+        className: "JHS 1",
+        subjectName: "Mathematics",
+        examDate: "Monday, 12 May 2026",
+        startTime: "9:00 AM",
+        endTime: "11:00 AM",
+      },
+      {
+        className: "Primary 4",
+        subjectName: "English Language",
+        examDate: "Wednesday, 14 May 2026",
+        startTime: "9:00 AM",
+        endTime: "10:30 AM",
+      },
+    ],
+    termCalendar: [
+      {
+        title: "Second term resumption",
+        displayDate: "April 2026",
+        description: "All learners return for the second term of the academic year.",
+      },
+      {
+        title: "Mid-term break",
+        displayDate: "May 2026",
+        description: "School closes for mid-term break. Learners return after one week.",
+      },
+    ],
+    dailyRoutine: [
+      {
+        timeLabel: "7:30 AM",
+        title: "Arrival and free play",
+        level: "creche",
+      },
+      {
+        timeLabel: "8:30 AM",
+        title: "Morning circle and songs",
+        level: "kg",
+      },
+      {
+        timeLabel: "10:00 AM",
+        title: "Snack and rest time",
+        level: "all",
+      },
+    ],
+  },
 } as const;
 
 export const graceBasicSchoolSeed = {
@@ -285,6 +365,43 @@ export const graceBasicSchoolSeed = {
       fileUrl: null,
     },
   ],
+  schedule: {
+    classes: ["Nursery", "Primary 1"],
+    activities: [
+      { name: "Phonics", category: "subject" },
+      { name: "Creative play", category: "activity" },
+    ],
+    classTimetable: [
+      {
+        className: "Nursery",
+        dayOfWeek: "monday",
+        periodLabel: "Morning session",
+        startTime: "8:00 AM",
+        endTime: "10:00 AM",
+        activityName: "Phonics and creative play",
+      },
+    ],
+    examTimetable: [],
+    termCalendar: [
+      {
+        title: "Open day for new parents",
+        displayDate: "April 2026",
+        description: "Visit the school to meet teachers and tour the campus.",
+      },
+    ],
+    dailyRoutine: [
+      {
+        timeLabel: "8:00 AM",
+        title: "Welcome and circle time",
+        level: "kg",
+      },
+      {
+        timeLabel: "11:30 AM",
+        title: "Story time and dismissal prep",
+        level: "all",
+      },
+    ],
+  },
 } as const;
 
 export type RedemptionSchoolSeed = typeof redemptionSchoolSeed;

@@ -9,6 +9,7 @@ import { GalleryPreview } from "@/components/public-site/GalleryPreview";
 import { AchievementsPreview } from "@/components/public-site/AchievementsPreview";
 import { AnnouncementsPreview } from "@/components/public-site/AnnouncementsPreview";
 import { DownloadsPreview } from "@/components/public-site/DownloadsPreview";
+import { SchedulePreview } from "@/components/public-site/SchedulePreview";
 import { ContactSection } from "@/components/public-site/ContactSection";
 import { Footer } from "@/components/public-site/Footer";
 import { SchoolBrandStyles } from "@/components/public-site/SchoolBrandStyles";
@@ -32,6 +33,7 @@ export function SchoolHomePage({ school }: SchoolHomePageProps) {
         <AchievementsPreview school={school} />
         <AnnouncementsPreview school={school} />
         <DownloadsPreview school={school} />
+        <SchedulePreview school={school} />
         <ContactSection school={school} />
       </main>
       <Footer school={school} />

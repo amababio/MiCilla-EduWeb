@@ -8,6 +8,7 @@ const summaryCards = [
   { key: "notices", label: "Notices", hint: "Published announcements" },
   { key: "achievements", label: "Achievements", hint: "Published highlights" },
   { key: "files", label: "Files", hint: "Published downloads" },
+  { key: "schedule", label: "Schedule", hint: "Active classes" },
 ] as const;
 
 export default async function AdminDashboardPage() {
@@ -58,7 +59,7 @@ export default async function AdminDashboardPage() {
         <h2 className="text-base font-semibold text-slate-900">Next steps</h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           Use the menu to update your school profile, homepage content, programs,
-          photos, achievements, notices, and files. Each school has its own public
+          photos, achievements, notices, files, and schedule. Each school has its own public
           page at `/schools/your-school-slug`. Preview your website anytime to see
           live changes.
         </p>

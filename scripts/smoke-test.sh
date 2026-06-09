@@ -104,6 +104,14 @@ CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-files.html -w "%{http_c
 check "GET /admin/files" "200" "$CODE"
 check_contains "Files page" "Files" "/tmp/micilla-files.html"
 
+CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-schedule.html -w "%{http_code}" "$BASE/admin/schedule")
+check "GET /admin/schedule" "200" "$CODE"
+check_contains "Schedule page" "Schedule" "/tmp/micilla-schedule.html"
+
+CODE=$(curl -s -o /tmp/micilla-home-schedule.html -w "%{http_code}" "$BASE/")
+check "GET / for schedule section" "200" "$CODE"
+check_contains "Homepage has schedule section" "School Schedule" "/tmp/micilla-home-schedule.html"
+
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /dev/null -w "%{http_code}" -X POST "$BASE/api/admin/logout")
 check "POST logout" "200" "$CODE"
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /dev/null -w "%{http_code}" "$BASE/admin/dashboard")
@@ -134,7 +142,7 @@ check_contains "Super admin dashboard" "All Schools" "/tmp/micilla-super-dash.ht
 CODE=$(curl -s -c "$SUPER_COOKIE" -b "$SUPER_COOKIE" -o /dev/null -w "%{http_code}" -X POST "$BASE/api/super-admin/logout")
 check "POST super-admin logout" "200" "$CODE"
 
-rm -f "$COOKIE" "$SUPER_COOKIE" /tmp/micilla-home.html /tmp/micilla-school-ris.html /tmp/micilla-school-gbs.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-achievements.html /tmp/micilla-notices.html /tmp/micilla-files.html /tmp/micilla-login.json /tmp/micilla-super-login.json /tmp/micilla-super-dash.html
+rm -f "$COOKIE" "$SUPER_COOKIE" /tmp/micilla-home.html /tmp/micilla-home-schedule.html /tmp/micilla-school-ris.html /tmp/micilla-school-gbs.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-achievements.html /tmp/micilla-notices.html /tmp/micilla-files.html /tmp/micilla-schedule.html /tmp/micilla-login.json /tmp/micilla-super-login.json /tmp/micilla-super-dash.html
 
 echo ""
 echo "=== Results: $PASS passed, $FAIL failed ==="

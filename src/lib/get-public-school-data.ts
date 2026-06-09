@@ -6,6 +6,7 @@ import {
 } from "@/lib/achievements";
 import { getAnnouncementCategoryLabel } from "@/lib/announcements";
 import { getDownloadCategoryLabel } from "@/lib/downloads";
+import { getRoutineLevelLabel, getWeekDayLabel } from "@/lib/schedule";
 import {
   defaultNavLinks,
   type AboutValue,
@@ -45,6 +46,28 @@ export async function getPublicSchoolData(
         where: { isPublished: true },
         orderBy: { sortOrder: "asc" },
       },
+      schoolClasses: {
+        where: { isActive: true },
+        orderBy: { sortOrder: "asc" },
+      },
+      classTimetableEntries: {
+        where: { isPublished: true },
+        orderBy: [{ dayOfWeek: "asc" }, { sortOrder: "asc" }],
+        include: { schoolClass: { select: { name: true } } },
+      },
+      examTimetableEntries: {
+        where: { isPublished: true },
+        orderBy: { sortOrder: "asc" },
+        include: { schoolClass: { select: { name: true } } },
+      },
+      termCalendarEvents: {
+        where: { isPublished: true },
+        orderBy: { sortOrder: "asc" },
+      },
+      dailyRoutineEntries: {
+        where: { isPublished: true },
+        orderBy: { sortOrder: "asc" },
+      },
     },
   });
 
@@ -53,6 +76,48 @@ export async function getPublicSchoolData(
   }
 
   const settings = school.websiteSettings;
+
+  const schedule = {
+    classes: school.schoolClasses.map((item) => item.name),
+    classTimetable: school.classTimetableEntries.map((entry) => ({
+      className: entry.schoolClass.name,
+      dayOfWeek: entry.dayOfWeek,
+      dayLabel: getWeekDayLabel(entry.dayOfWeek),
+      periodLabel: entry.periodLabel,
+      startTime: entry.startTime,
+      endTime: entry.endTime,
+      activityName: entry.activityName,
+    })),
+    examTimetable: school.examTimetableEntries.map((entry) => ({
+      className: entry.schoolClass?.name ?? null,
+      subjectName: entry.subjectName,
+      examDate: entry.examDate,
+      startTime: entry.startTime,
+      endTime: entry.endTime,
+    })),
+    termCalendar: school.termCalendarEvents.map((entry) => ({
+      title: entry.title,
+      displayDate: entry.displayDate,
+      description: entry.description,
+    })),
+    dailyRoutine: school.dailyRoutineEntries.map((entry) => ({
+      timeLabel: entry.timeLabel,
+      title: entry.title,
+      level: entry.level,
+      levelLabel: getRoutineLevelLabel(entry.level),
+    })),
+  };
+
+  const hasScheduleContent =
+    schedule.classes.length > 0 ||
+    schedule.classTimetable.length > 0 ||
+    schedule.examTimetable.length > 0 ||
+    schedule.termCalendar.length > 0 ||
+    schedule.dailyRoutine.length > 0;
+
+  const navLinks = hasScheduleContent
+    ? defaultNavLinks
+    : defaultNavLinks.filter((link) => link.href !== "#schedule");
 
   return {
     name: school.name,
@@ -121,6 +186,7 @@ export async function getPublicSchoolData(
       categoryLabel: getDownloadCategoryLabel(item.category),
       fileUrl: item.fileUrl,
     })),
+    schedule,
     contact: {
       headline: settings.contactHeadline,
       description: settings.contactDescription,
@@ -130,6 +196,6 @@ export async function getPublicSchoolData(
     footer: {
       poweredBy: settings.poweredByFooter,
     },
-    navLinks: defaultNavLinks,
+    navLinks,
   };
 }

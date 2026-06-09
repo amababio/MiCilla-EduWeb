@@ -33,6 +33,12 @@ model School {
   announcements   Announcement[]
   downloads       Download[]
   admins          Admin[]
+  schoolClasses   SchoolClass[]
+  scheduleActivities ScheduleActivity[]
+  classTimetableEntries ClassTimetableEntry[]
+  examTimetableEntries  ExamTimetableEntry[]
+  termCalendarEvents    TermCalendarEvent[]
+  dailyRoutineEntries   DailyRoutineEntry[]
 }
 
 model WebsiteSettings {
@@ -164,4 +170,101 @@ model SuperAdmin {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model SchoolClass {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name      String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  classTimetableEntries ClassTimetableEntry[]
+  examTimetableEntries  ExamTimetableEntry[]
+
+  @@index([schoolId, sortOrder])
+}
+
+model ScheduleActivity {
+  id        String   @id @default(cuid())
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  name      String
+  category  String   @default("subject")
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model ClassTimetableEntry {
+  id            String      @id @default(cuid())
+  schoolId      String
+  school        School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolClassId String
+  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id], onDelete: Cascade)
+  dayOfWeek     String
+  periodLabel   String
+  startTime     String
+  endTime       String
+  activityName  String
+  sortOrder     Int         @default(0)
+  isPublished   Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model ExamTimetableEntry {
+  id            String       @id @default(cuid())
+  schoolId      String
+  school        School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolClassId String?
+  schoolClass   SchoolClass? @relation(fields: [schoolClassId], references: [id], onDelete: SetNull)
+  subjectName   String
+  examDate      String
+  startTime     String
+  endTime       String
+  sortOrder     Int          @default(0)
+  isPublished   Boolean      @default(true)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model TermCalendarEvent {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title       String
+  displayDate String
+  description String
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
+}
+
+model DailyRoutineEntry {
+  id          String   @id @default(cuid())
+  schoolId    String
+  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  timeLabel   String
+  title       String
+  level       String   @default("all")
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([schoolId, sortOrder])
 }

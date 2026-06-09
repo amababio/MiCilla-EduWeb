@@ -34,6 +34,45 @@ export type DownloadItem = {
   fileUrl: string | null;
 };
 
+export type ClassTimetableItem = {
+  className: string;
+  dayOfWeek: string;
+  dayLabel: string;
+  periodLabel: string;
+  startTime: string;
+  endTime: string;
+  activityName: string;
+};
+
+export type ExamTimetableItem = {
+  className: string | null;
+  subjectName: string;
+  examDate: string;
+  startTime: string;
+  endTime: string;
+};
+
+export type TermCalendarItem = {
+  title: string;
+  displayDate: string;
+  description: string;
+};
+
+export type DailyRoutineItem = {
+  timeLabel: string;
+  title: string;
+  level: string;
+  levelLabel: string;
+};
+
+export type ScheduleData = {
+  classes: string[];
+  classTimetable: ClassTimetableItem[];
+  examTimetable: ExamTimetableItem[];
+  termCalendar: TermCalendarItem[];
+  dailyRoutine: DailyRoutineItem[];
+};
+
 export type ProgramItem = {
   name: string;
   description: string;
@@ -81,6 +120,7 @@ export type PublicSchoolData = {
   };
   announcements: AnnouncementItem[];
   downloads: DownloadItem[];
+  schedule: ScheduleData;
   contact: {
     headline: string;
     description: string;
@@ -99,5 +139,6 @@ export const defaultNavLinks: NavLink[] = [
   { label: "Programs", href: "#programs" },
   { label: "Gallery", href: "#gallery" },
   { label: "Achievements", href: "#achievements" },
+  { label: "Schedule", href: "#schedule" },
   { label: "Contact", href: "#contact" },
 ];

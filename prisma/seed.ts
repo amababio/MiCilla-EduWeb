@@ -151,6 +151,92 @@ async function seedSchool(seed: SchoolSeed) {
     })),
   });
 
+  await prisma.classTimetableEntry.deleteMany({ where: { schoolId: school.id } });
+  await prisma.examTimetableEntry.deleteMany({ where: { schoolId: school.id } });
+  await prisma.termCalendarEvent.deleteMany({ where: { schoolId: school.id } });
+  await prisma.dailyRoutineEntry.deleteMany({ where: { schoolId: school.id } });
+  await prisma.scheduleActivity.deleteMany({ where: { schoolId: school.id } });
+  await prisma.schoolClass.deleteMany({ where: { schoolId: school.id } });
+
+  const classIdByName = new Map<string, string>();
+
+  for (const [index, name] of seed.schedule.classes.entries()) {
+    const created = await prisma.schoolClass.create({
+      data: {
+        schoolId: school.id,
+        name,
+        sortOrder: index,
+        isActive: true,
+      },
+    });
+    classIdByName.set(name, created.id);
+  }
+
+  await prisma.scheduleActivity.createMany({
+    data: seed.schedule.activities.map((item, index) => ({
+      schoolId: school.id,
+      name: item.name,
+      category: item.category,
+      sortOrder: index,
+      isActive: true,
+    })),
+  });
+
+  if (seed.schedule.classTimetable.length > 0) {
+    await prisma.classTimetableEntry.createMany({
+      data: seed.schedule.classTimetable.map((item, index) => ({
+        schoolId: school.id,
+        schoolClassId: classIdByName.get(item.className)!,
+        dayOfWeek: item.dayOfWeek,
+        periodLabel: item.periodLabel,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        activityName: item.activityName,
+        sortOrder: index,
+        isPublished: true,
+      })),
+    });
+  }
+
+  if (seed.schedule.examTimetable.length > 0) {
+    await prisma.examTimetableEntry.createMany({
+      data: seed.schedule.examTimetable.map((item, index) => ({
+        schoolId: school.id,
+        schoolClassId: item.className
+          ? (classIdByName.get(item.className) ?? null)
+          : null,
+        subjectName: item.subjectName,
+        examDate: item.examDate,
+        startTime: item.startTime,
+        endTime: item.endTime,
+        sortOrder: index,
+        isPublished: true,
+      })),
+    });
+  }
+
+  await prisma.termCalendarEvent.createMany({
+    data: seed.schedule.termCalendar.map((item, index) => ({
+      schoolId: school.id,
+      title: item.title,
+      displayDate: item.displayDate,
+      description: item.description,
+      sortOrder: index,
+      isPublished: true,
+    })),
+  });
+
+  await prisma.dailyRoutineEntry.createMany({
+    data: seed.schedule.dailyRoutine.map((item, index) => ({
+      schoolId: school.id,
+      timeLabel: item.timeLabel,
+      title: item.title,
+      level: item.level,
+      sortOrder: index,
+      isPublished: true,
+    })),
+  });
+
   const adminEmail =
     demoAdminAccounts[seed.slug] ??
     (process.env.SEED_ADMIN_EMAIL ?? "admin@example.com").toLowerCase();

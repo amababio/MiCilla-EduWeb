@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 13 — MiCilla Super Admin
+Phase 14 — Optional Schedule Module
 
 ## Stack
 
@@ -127,6 +127,12 @@ MiCilla staff can create schools, create school admins, reset admin passwords, a
 Default seeded super admin:
 
 - `super@micilla.com` / `super123!` (or your `SEED_SUPER_ADMIN_*` values in `.env`)
+
+## Schedule (Phase 14)
+
+- Edit page: [http://localhost:3000/admin/schedule](http://localhost:3000/admin/schedule)
+
+Admins can manage classes, subjects/activities, class timetables, exam timetables, term calendar events, and daily routines for crèche/KG. Published schedule items appear in the public Schedule section on the homepage.
 
 Default seeded admin comes from your `.env` file:
 
