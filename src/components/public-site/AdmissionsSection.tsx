@@ -13,13 +13,13 @@ export function AdmissionsSection({ school }: AdmissionsSectionProps) {
 
   return (
     <section id="admissions" className="bg-white py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title={school.admissions.headline}
           subtitle={school.admissions.description}
         />
 
-        <div className="rounded-2xl border border-mauve-200 bg-mauve-100/70 p-6 sm:p-8">
+        <div className="motion-card rounded-2xl border border-mauve-200 bg-mauve-100/70 p-6 sm:p-8">
           <h3 className="text-sm font-semibold uppercase tracking-wide text-mauve-700">
             Available Levels
           </h3>
@@ -40,7 +40,7 @@ export function AdmissionsSection({ school }: AdmissionsSectionProps) {
                 href={admissionForm.fileUrl!}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"
+                className="motion-btn motion-btn-primary inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-mauve-600"
               >
                 Download Admission Form
               </a>
@@ -51,7 +51,7 @@ export function AdmissionsSection({ school }: AdmissionsSectionProps) {
             )}
             <a
               href={phoneToTel(school.phone)}
-              className="inline-flex items-center justify-center rounded-full border-2 border-mauve-300 bg-white px-6 py-3 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50"
+              className="motion-btn inline-flex items-center justify-center rounded-full border-2 border-mauve-300 bg-white px-6 py-3 text-sm font-semibold text-mauve-700 hover:bg-mauve-50"
             >
               Call Admissions Office
             </a>
@@ -59,7 +59,7 @@ export function AdmissionsSection({ school }: AdmissionsSectionProps) {
               href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"
+              className="motion-btn motion-btn-primary inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm hover:bg-mauve-600"
             >
               WhatsApp Admissions
             </a>

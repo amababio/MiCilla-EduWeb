@@ -9,7 +9,7 @@ type AchievementsPreviewProps = {
 export function AchievementsPreview({ school }: AchievementsPreviewProps) {
   return (
     <section id="achievements" className="bg-white py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title="Excellence & Achievements"
           subtitle={school.achievements.subtitle}
@@ -21,11 +21,11 @@ export function AchievementsPreview({ school }: AchievementsPreviewProps) {
             hint="The school will publish academic results, competitions, and student projects when ready."
           />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="motion-stagger-grid grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {school.achievements.cards.map((card) => (
               <article
                 key={`${card.title}-${card.category}`}
-                className="rounded-2xl border border-mauve-200 bg-gradient-to-b from-mauve-100 to-white p-6 shadow-sm"
+                className="motion-card rounded-2xl border border-mauve-200 bg-gradient-to-b from-mauve-100 to-white p-6 shadow-sm"
               >
                 <div className="mb-4 inline-flex rounded-full bg-mauve-300 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-mauve-800">
                   {card.categoryLabel}

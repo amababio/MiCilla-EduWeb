@@ -11,7 +11,7 @@ export function MobileContactBar({ school }: MobileContactBarProps) {
       <div className="mx-auto flex max-w-lg gap-2">
         <a
           href={phoneToTel(school.phone)}
-          className="flex flex-1 items-center justify-center rounded-full border border-mauve-300 px-4 py-2.5 text-sm font-semibold text-mauve-700"
+          className="motion-btn flex flex-1 items-center justify-center rounded-full border border-mauve-300 px-4 py-2.5 text-sm font-semibold text-mauve-700"
         >
           Call
         </a>
@@ -19,7 +19,7 @@ export function MobileContactBar({ school }: MobileContactBarProps) {
           href={phoneToWhatsApp(school.whatsapp)}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center rounded-full bg-mauve-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm"
+          className="motion-btn motion-btn-primary flex flex-1 items-center justify-center rounded-full bg-mauve-500 px-4 py-2.5 text-sm font-semibold text-white shadow-sm"
         >
           WhatsApp
         </a>

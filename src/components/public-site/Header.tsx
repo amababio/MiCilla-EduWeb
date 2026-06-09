@@ -48,7 +48,7 @@ export function Header({ school }: HeaderProps) {
         <div className="hidden items-center gap-2 md:flex">
           <a
             href={phoneToTel(school.phone)}
-            className="inline-flex min-h-10 items-center rounded-full border border-mauve-300 px-3 py-1.5 text-xs font-semibold text-mauve-700 transition hover:bg-mauve-50 sm:px-4 sm:text-sm"
+            className="motion-btn inline-flex min-h-10 items-center rounded-full border border-mauve-300 px-3 py-1.5 text-xs font-semibold text-mauve-700 hover:bg-mauve-50 sm:px-4 sm:text-sm"
           >
             Call
           </a>
@@ -56,7 +56,7 @@ export function Header({ school }: HeaderProps) {
             href={phoneToWhatsApp(school.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-10 items-center rounded-full bg-mauve-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-mauve-600 sm:px-4 sm:text-sm"
+            className="motion-btn motion-btn-primary inline-flex min-h-10 items-center rounded-full bg-mauve-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-mauve-600 sm:px-4 sm:text-sm"
           >
             WhatsApp
           </a>
@@ -122,7 +122,7 @@ export function Header({ school }: HeaderProps) {
               href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex min-h-11 items-center justify-center rounded-full bg-mauve-500 px-4 py-2 text-sm font-semibold text-white shadow-sm"
+              className="motion-btn motion-btn-primary inline-flex min-h-11 items-center justify-center rounded-full bg-mauve-500 px-4 py-2 text-sm font-semibold text-white shadow-sm"
               onClick={() => setMenuOpen(false)}
             >
               Chat on WhatsApp

@@ -8,17 +8,17 @@ type AboutSectionProps = {
 export function AboutSection({ school }: AboutSectionProps) {
   return (
     <section id="about" className="bg-mauve-50 py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title="About Our School"
           subtitle={school.about.description}
         />
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="motion-stagger-grid grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {school.about.values.map((value) => (
             <article
               key={value.title}
-              className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm"
+              className="motion-card rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm"
             >
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-mauve-200 text-mauve-700">
                 <svg

@@ -29,7 +29,7 @@ export function SchedulePreview({ school }: SchedulePreviewProps) {
 
   return (
     <section id="schedule" className="bg-mauve-50 py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title="School Schedule"
           subtitle="Class timetables, exam dates, term calendar, and early-years routines."

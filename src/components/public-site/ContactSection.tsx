@@ -16,14 +16,14 @@ export function ContactSection({ school }: ContactSectionProps) {
       id="contact"
       className="bg-gradient-to-b from-mauve-100 via-mauve-50 to-white py-16 sm:py-20"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title={school.contact.headline}
           subtitle={school.contact.description}
         />
 
-        <div className="grid gap-6 lg:grid-cols-2">
-          <div className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm sm:p-8">
+        <div className="motion-stagger-grid grid gap-6 lg:grid-cols-2">
+          <div className="motion-card rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm sm:p-8">
             <h3 className="text-lg font-semibold text-slate-900">
               Contact Details
             </h3>
@@ -86,7 +86,7 @@ export function ContactSection({ school }: ContactSectionProps) {
             </button>
           </div>
 
-          <div className="flex flex-col justify-center rounded-2xl bg-gradient-to-br from-mauve-400 to-mauve-600 p-6 text-white shadow-lg sm:p-8">
+          <div className="motion-card flex flex-col justify-center rounded-2xl bg-gradient-to-br from-mauve-400 to-mauve-600 p-6 text-white shadow-lg sm:p-8">
             <p className="text-sm font-semibold uppercase tracking-wide text-white/80">
               Quick Contact
             </p>
@@ -100,13 +100,13 @@ export function ContactSection({ school }: ContactSectionProps) {
               href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-mauve-700 transition hover:bg-mauve-50"
+              className="motion-btn mt-8 inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-bold text-mauve-700 hover:bg-mauve-50"
             >
               Start WhatsApp Chat
             </a>
             <a
               href={phoneToTel(school.phone)}
-              className="mt-3 inline-flex items-center justify-center rounded-full border-2 border-white/60 px-6 py-3 text-sm font-semibold text-white transition hover:bg-white/10"
+              className="motion-btn mt-3 inline-flex items-center justify-center rounded-full border-2 border-white/60 px-6 py-3 text-sm font-semibold text-white hover:bg-white/10"
             >
               Call {school.phone}
             </a>

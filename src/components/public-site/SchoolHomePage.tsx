@@ -14,6 +14,8 @@ import { ContactSection } from "@/components/public-site/ContactSection";
 import { Footer } from "@/components/public-site/Footer";
 import { MobileContactBar } from "@/components/public-site/MobileContactBar";
 import { SchoolBrandStyles } from "@/components/public-site/SchoolBrandStyles";
+import { HomepageMotionProvider } from "@/components/public-site/HomepageMotionProvider";
+import { FloatingWhatsAppButton } from "@/components/public-site/FloatingWhatsAppButton";
 
 type SchoolHomePageProps = {
   school: PublicSchoolData;
@@ -23,22 +25,28 @@ export function SchoolHomePage({ school }: SchoolHomePageProps) {
   return (
     <>
       <SchoolBrandStyles brandColor={school.brandColor} />
-      <Header school={school} />
-      <main className="pb-20 lg:pb-0">
-        <HeroSection school={school} />
-        <AdmissionsSection school={school} />
-        <AboutSection school={school} />
-        <ProgramsSection school={school} />
-        <WhyChooseUsSection school={school} />
-        <GalleryPreview school={school} />
-        <AchievementsPreview school={school} />
-        <AnnouncementsPreview school={school} />
-        <DownloadsPreview school={school} />
-        <SchedulePreview school={school} />
-        <ContactSection school={school} />
-      </main>
-      <Footer school={school} />
-      <MobileContactBar school={school} />
+      <HomepageMotionProvider>
+        <Header school={school} />
+        <main className="pb-20 lg:pb-0">
+          <HeroSection school={school} />
+          <AdmissionsSection school={school} />
+          <AboutSection school={school} />
+          <ProgramsSection school={school} />
+          <WhyChooseUsSection school={school} />
+          <GalleryPreview school={school} />
+          <AchievementsPreview school={school} />
+          <AnnouncementsPreview school={school} />
+          <DownloadsPreview school={school} />
+          <SchedulePreview school={school} />
+          <ContactSection school={school} />
+        </main>
+        <Footer school={school} />
+        <MobileContactBar school={school} />
+        <FloatingWhatsAppButton
+          whatsapp={school.whatsapp}
+          schoolName={school.name}
+        />
+      </HomepageMotionProvider>
     </>
   );
 }

@@ -10,7 +10,7 @@ type ProgramsSectionProps = {
 export function ProgramsSection({ school }: ProgramsSectionProps) {
   return (
     <section id="programs" className="bg-white py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title="Programs & Levels"
           subtitle="From early childhood to JHS, we provide structured learning at every stage."
@@ -22,11 +22,11 @@ export function ProgramsSection({ school }: ProgramsSectionProps) {
             hint="Contact the school office for details about available levels and classes."
           />
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="motion-stagger-grid grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {school.programs.map((program) => (
               <article
                 key={program.name}
-                className="flex flex-col overflow-hidden rounded-2xl border border-mauve-100 bg-gradient-to-b from-white to-mauve-50 shadow-sm transition hover:border-mauve-300 hover:shadow-md"
+                className="motion-card flex flex-col overflow-hidden rounded-2xl border border-mauve-100 bg-gradient-to-b from-white to-mauve-50 shadow-sm hover:border-mauve-300"
               >
                 {program.imageUrl ? (
                   <SchoolImage

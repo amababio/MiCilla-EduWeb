@@ -96,13 +96,13 @@ export function Footer({ school }: FooterProps) {
                 href={phoneToWhatsApp(school.whatsapp)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50"
+                className="motion-btn inline-flex min-h-11 items-center justify-center rounded-full bg-white px-5 py-2.5 text-sm font-semibold text-mauve-700 hover:bg-mauve-50"
               >
                 Chat on WhatsApp
               </a>
               <a
                 href={phoneToTel(school.phone)}
-                className="inline-flex min-h-11 items-center justify-center rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10"
+                className="motion-btn inline-flex min-h-11 items-center justify-center rounded-full border border-white/40 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10"
               >
                 Call school
               </a>

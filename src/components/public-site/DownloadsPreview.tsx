@@ -9,7 +9,7 @@ type DownloadsPreviewProps = {
 export function DownloadsPreview({ school }: DownloadsPreviewProps) {
   return (
     <section className="bg-white py-16 sm:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6" data-motion-reveal>
         <SectionHeading
           title="Downloads"
           subtitle="Helpful school documents for parents and guardians."
@@ -21,11 +21,11 @@ export function DownloadsPreview({ school }: DownloadsPreviewProps) {
             hint="Admission forms, prospectus files, and other documents will appear here when published."
           />
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="motion-stagger-grid grid gap-4 sm:grid-cols-2">
             {school.downloads.map((item) => (
               <article
                 key={`${item.title}-${item.category}`}
-                className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center sm:gap-4"
+                className="motion-card flex flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50 p-6 sm:flex-row sm:items-center sm:gap-4"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
@@ -43,7 +43,7 @@ export function DownloadsPreview({ school }: DownloadsPreviewProps) {
                     href={item.fileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-4 inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border border-mauve-300 bg-white px-5 py-2 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50 sm:mt-0"
+                    className="motion-btn mt-4 inline-flex min-h-11 shrink-0 items-center justify-center rounded-full border border-mauve-300 bg-white px-5 py-2 text-sm font-semibold text-mauve-700 hover:bg-mauve-50 sm:mt-0"
                   >
                     Download
                   </a>
