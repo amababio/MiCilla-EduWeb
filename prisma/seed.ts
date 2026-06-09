@@ -27,7 +27,6 @@ async function seedSchool(seed: SchoolSeed) {
       whatsapp: seed.whatsapp,
       email: seed.email,
       officeHours: seed.officeHours,
-      brandColor: seed.brandColor,
     },
     create: {
       slug: seed.slug,

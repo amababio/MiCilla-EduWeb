@@ -4,8 +4,7 @@ import { SchoolHomePage } from "@/components/public-site/SchoolHomePage";
 import { getPublicSchoolData } from "@/lib/get-public-school-data";
 import { prisma } from "@/lib/prisma";
 
-/** Regenerate cached school pages every 5 minutes when content changes. */
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 /** Only slugs from generateStaticParams are valid; unknown schools return 404. */
 export const dynamicParams = false;

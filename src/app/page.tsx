@@ -3,8 +3,7 @@ import { SchoolHomePage } from "@/components/public-site/SchoolHomePage";
 import { getPublicSchoolData } from "@/lib/get-public-school-data";
 import { getDefaultSchoolSlug } from "@/lib/school-slug";
 
-/** Regenerate the cached homepage every 5 minutes when content changes. */
-export const revalidate = 300;
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
   const school = await getPublicSchoolData(getDefaultSchoolSlug());

@@ -11,6 +11,7 @@ import {
   type ProgramAdminItem,
   type ProgramFormState,
 } from "@/lib/actions/programs";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 type ProgramsManagerProps = {
   programs: ProgramAdminItem[];
@@ -195,7 +196,8 @@ function ProgramCard({
             idPrefix={program.id}
             defaultName={program.name}
             defaultDescription={program.description}
-            defaultImageUrl={program.imageUrl ?? ""}
+            currentImageUrl={program.imageUrl}
+            currentImageAlt={`${program.name} photo`}
           />
           {editState.error ? (
             <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -287,14 +289,16 @@ type ProgramFieldsProps = {
   idPrefix: string;
   defaultName?: string;
   defaultDescription?: string;
-  defaultImageUrl?: string;
+  currentImageUrl?: string | null;
+  currentImageAlt?: string;
 };
 
 function ProgramFields({
   idPrefix,
   defaultName = "",
   defaultDescription = "",
-  defaultImageUrl = "",
+  currentImageUrl = null,
+  currentImageAlt = "Program photo",
 }: ProgramFieldsProps) {
   return (
     <>
@@ -314,13 +318,10 @@ function ProgramFields({
         required
         rows={4}
       />
-      <Field
-        id={`${idPrefix}-imageUrl`}
-        label="Photo Link"
-        name="imageUrl"
-        defaultValue={defaultImageUrl}
-        placeholder="https://example.com/photo.jpg"
-        hint="Optional. Paste a photo link to show on your public website."
+      <ImageUploadField
+        id={`${idPrefix}-photo`}
+        currentImageUrl={currentImageUrl}
+        currentImageAlt={currentImageAlt}
       />
     </>
   );

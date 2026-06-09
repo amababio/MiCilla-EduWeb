@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath, refresh } from "next/cache";
 import { getAdminSession } from "@/lib/auth";
 import {
   clearSchoolLogoFiles,
@@ -8,6 +7,7 @@ import {
   saveSchoolLogoFile,
 } from "@/lib/school-logo";
 import { prisma } from "@/lib/prisma";
+import { revalidatePublicSchoolPages } from "@/lib/revalidate-public-site";
 
 export type SchoolLogoFormState = {
   success: boolean;
@@ -16,9 +16,8 @@ export type SchoolLogoFormState = {
   logoUrl?: string | null;
 };
 
-async function revalidatePublicSite() {
-  revalidatePath("/", "page");
-  refresh();
+async function revalidatePublicSite(schoolSlug: string) {
+  revalidatePublicSchoolPages(schoolSlug);
 }
 
 export async function uploadSchoolLogoFormAction(
@@ -46,7 +45,7 @@ export async function uploadSchoolLogoFormAction(
       data: { logoUrl: saved.publicPath },
     });
 
-    await revalidatePublicSite();
+    await revalidatePublicSite(session.schoolSlug);
 
     return {
       success: true,
@@ -80,7 +79,7 @@ export async function removeSchoolLogoAction(): Promise<SchoolLogoFormState> {
       data: { logoUrl: null },
     });
 
-    await revalidatePublicSite();
+    await revalidatePublicSite(session.schoolSlug);
 
     return {
       success: true,

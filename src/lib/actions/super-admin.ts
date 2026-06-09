@@ -1,10 +1,10 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { getSuperAdminSession } from "@/lib/super-admin-auth";
 import { hashPassword } from "@/lib/password";
 import { prisma } from "@/lib/prisma";
 import { getSchoolPublicPath } from "@/lib/school-slug";
+import { revalidatePublicSchoolPages } from "@/lib/revalidate-public-site";
 import {
   buildDefaultWebsiteSettings,
   parseCreateSchoolAdminInput,
@@ -43,12 +43,6 @@ async function requireSuperAdminSession() {
   }
   return session;
 }
-
-function revalidateSchoolPublicPages(slug: string) {
-  revalidatePath("/", "page");
-  revalidatePath(getSchoolPublicPath(slug), "page");
-}
-
 export async function getSchoolsForSuperAdmin(): Promise<SuperAdminSchoolItem[]> {
   const session = await requireSuperAdminSession();
   if (!session) {
@@ -160,7 +154,7 @@ export async function createSchoolFormAction(
       return createdSchool;
     });
 
-    revalidateSchoolPublicPages(school.slug);
+    revalidatePublicSchoolPages(school.slug);
 
     return {
       success: true,
@@ -280,7 +274,7 @@ export async function setSchoolActiveAction(
       select: { slug: true },
     });
 
-    revalidateSchoolPublicPages(school.slug);
+    revalidatePublicSchoolPages(school.slug);
 
     return { success: true };
   } catch (error) {

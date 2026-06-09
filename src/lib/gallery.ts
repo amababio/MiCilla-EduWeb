@@ -1,5 +1,3 @@
-import { normalizeOptionalUrl } from "@/lib/school-profile";
-
 export const galleryAccentPresets = [
   { value: "from-mauve-100 to-mauve-400", label: "Soft lilac" },
   { value: "from-mauve-200 to-mauve-400", label: "Light lilac" },
@@ -16,7 +14,6 @@ const presetValues: Set<string> = new Set(
 export type GalleryInput = {
   title: string;
   category: string;
-  imageUrl: string | null;
   accentClass: string;
   isFeatured: boolean;
 };
@@ -26,7 +23,6 @@ export function parseGalleryInput(
 ): { data: GalleryInput | null; error?: string } {
   const title = String(formData.get("title") ?? "").trim();
   const category = String(formData.get("category") ?? "").trim();
-  const imageUrlRaw = String(formData.get("imageUrl") ?? "").trim();
   const accentClass = String(formData.get("accentClass") ?? "").trim();
   const isFeatured = formData.get("isFeatured") === "on";
 
@@ -42,22 +38,10 @@ export function parseGalleryInput(
     return { data: null, error: "Please choose a placeholder color." };
   }
 
-  let imageUrl: string | null = null;
-  if (imageUrlRaw) {
-    imageUrl = normalizeOptionalUrl(imageUrlRaw);
-    if (!imageUrl) {
-      return {
-        data: null,
-        error: "Photo link must be a valid http or https URL.",
-      };
-    }
-  }
-
   return {
     data: {
       title,
       category,
-      imageUrl,
       accentClass,
       isFeatured,
     },

@@ -3,30 +3,26 @@
 import { useActionState, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
-  saveSchoolProfileFormAction,
+  updateSchoolProfile,
   type SchoolProfileData,
-  type SchoolProfileFormState,
 } from "@/lib/actions/school-profile";
 import {
   removeSchoolLogoAction,
   uploadSchoolLogoFormAction,
   type SchoolLogoFormState,
 } from "@/lib/actions/school-logo";
+import { IMAGE_ACCEPT } from "@/lib/image-upload-shared";
+import { normalizeBrandColor } from "@/lib/school-profile";
 import { SchoolLogoMark } from "@/components/public-site/SchoolLogoMark";
 
 type SchoolProfileFormProps = {
   profile: SchoolProfileData;
 };
 
-const initialFormState: SchoolProfileFormState = { success: false };
 const initialLogoState: SchoolLogoFormState = { success: false };
 
 export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
   const router = useRouter();
-  const [state, formAction, isPending] = useActionState(
-    saveSchoolProfileFormAction,
-    initialFormState,
-  );
   const [logoState, logoAction, isUploadingLogo] = useActionState(
     uploadSchoolLogoFormAction,
     initialLogoState,
@@ -34,6 +30,9 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
   const [brandColor, setBrandColor] = useState(profile.brandColor);
   const [logoUrl, setLogoUrl] = useState(profile.logoUrl);
   const [logoError, setLogoError] = useState("");
+  const [saveMessage, setSaveMessage] = useState("");
+  const [saveError, setSaveError] = useState("");
+  const [isSaving, startSaveTransition] = useTransition();
   const [isRemovingLogo, startRemoveTransition] = useTransition();
 
   useEffect(() => {
@@ -43,10 +42,41 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
   }, [logoState.logoUrl]);
 
   useEffect(() => {
-    if (logoState.message || state.message) {
+    if (logoState.message) {
       router.refresh();
     }
-  }, [logoState.message, router, state.message]);
+  }, [logoState.message, router]);
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setSaveMessage("");
+    setSaveError("");
+
+    const normalizedColor = normalizeBrandColor(brandColor);
+    if (!normalizedColor) {
+      setSaveError("Please choose a valid brand color (for example #0055ff).");
+      return;
+    }
+
+    const formData = new FormData(event.currentTarget);
+    formData.set("brandColor", normalizedColor);
+
+    startSaveTransition(async () => {
+      const result = await updateSchoolProfile(formData);
+
+      if (!result.success) {
+        setSaveError(result.error ?? "Could not save changes.");
+        return;
+      }
+
+      if (result.brandColor) {
+        setBrandColor(result.brandColor);
+      }
+
+      setSaveMessage("Changes saved. Your public website has been updated.");
+      router.refresh();
+    });
+  }
 
   function handleRemoveLogo() {
     if (!window.confirm("Remove the uploaded logo and show school initials instead?")) {
@@ -76,7 +106,7 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
       <section className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-900">School Logo</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Upload your school logo directly. JPG, PNG, WebP, or GIF up to 2 MB.
+          Upload your school logo directly. JPG, PNG, WebP, GIF, BMP, or HEIC up to 10 MB.
         </p>
 
         <div className="mt-6 flex flex-col gap-6 sm:flex-row sm:items-start">
@@ -106,7 +136,7 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
                   id="logo"
                   name="logo"
                   type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  accept={IMAGE_ACCEPT}
                   className="mt-2 block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 file:bg-mauve-100 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-mauve-700 hover:file:bg-mauve-200"
                 />
               </div>
@@ -151,7 +181,7 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
         </div>
       </section>
 
-      <form action={formAction} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8">
         <section className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900">School Details</h2>
           <p className="mt-1 text-sm text-slate-600">
@@ -192,11 +222,11 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
         <section className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm">
           <h2 className="text-lg font-semibold text-slate-900">Branding</h2>
           <p className="mt-1 text-sm text-slate-600">
-            Choose your school color for the public website.
+            Choose your school color for the public website, then click Save Changes below.
           </p>
 
           <div className="mt-6 max-w-md">
-            <label htmlFor="brandColor" className="block text-sm font-medium text-slate-700">
+            <label htmlFor="brandColorPicker" className="block text-sm font-medium text-slate-700">
               School Color
             </label>
             <div className="mt-2 flex items-center gap-3">
@@ -208,7 +238,7 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
                 className="h-11 w-16 cursor-pointer rounded-lg border border-mauve-200 bg-white"
               />
               <input
-                name="brandColor"
+                id="brandColor"
                 type="text"
                 value={brandColor}
                 onChange={(event) => setBrandColor(event.target.value)}
@@ -221,21 +251,21 @@ export function SchoolProfileForm({ profile }: SchoolProfileFormProps) {
           </div>
         </section>
 
-        {state.error ? (
-          <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{state.error}</p>
+        {saveError ? (
+          <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">{saveError}</p>
         ) : null}
-        {state.message ? (
+        {saveMessage ? (
           <p className="rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-            {state.message}
+            {saveMessage}
           </p>
         ) : null}
 
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isSaving}
           className="rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-mauve-600 disabled:opacity-60"
         >
-          {isPending ? "Saving..." : "Save Changes"}
+          {isSaving ? "Saving..." : "Save Changes"}
         </button>
       </form>
     </div>

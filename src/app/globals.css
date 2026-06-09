@@ -3,16 +3,6 @@
 :root {
   --background: #fdf7ff;
   --foreground: #5b2d6e;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-}
-
-/* Use @theme (not inline) so utilities reference CSS variables that SchoolBrandStyles can override. */
-@theme {
   --color-mauve-50: #fdf7ff;
   --color-mauve-100: #f9edff;
   --color-mauve-200: #f3ddfd;
@@ -23,6 +13,22 @@
   --color-mauve-700: #a847d4;
   --color-mauve-800: #8f38b8;
   --color-mauve-900: #762f98;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --color-mauve-50: var(--color-mauve-50);
+  --color-mauve-100: var(--color-mauve-100);
+  --color-mauve-200: var(--color-mauve-200);
+  --color-mauve-300: var(--color-mauve-300);
+  --color-mauve-400: var(--color-mauve-400);
+  --color-mauve-500: var(--color-mauve-500);
+  --color-mauve-600: var(--color-mauve-600);
+  --color-mauve-700: var(--color-mauve-700);
+  --color-mauve-800: var(--color-mauve-800);
+  --color-mauve-900: var(--color-mauve-900);
 }
 
 html {

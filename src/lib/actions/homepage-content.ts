@@ -1,9 +1,9 @@
 "use server";
 
-import { revalidatePath, refresh } from "next/cache";
 import { getAdminSession } from "@/lib/auth";
 import { parseHomepageContentInput } from "@/lib/homepage-content";
 import { prisma } from "@/lib/prisma";
+import { revalidatePublicSchoolPages } from "@/lib/revalidate-public-site";
 import type { AboutValue } from "@/types/public-site";
 
 export type HomepageContentData = {
@@ -121,8 +121,7 @@ export async function updateHomepageContent(formData: FormData): Promise<{
       },
     });
 
-    revalidatePath("/", "page");
-    refresh();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {

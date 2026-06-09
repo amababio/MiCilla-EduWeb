@@ -1,9 +1,14 @@
 "use server";
 
-import { revalidatePath, refresh } from "next/cache";
 import { getAdminSession } from "@/lib/auth";
 import { parseGalleryInput } from "@/lib/gallery";
+import {
+  deleteUploadedImage,
+  getUploadedImageFromForm,
+  saveSchoolImageFile,
+} from "@/lib/image-upload";
 import { prisma } from "@/lib/prisma";
+import { revalidatePublicSchoolPages } from "@/lib/revalidate-public-site";
 
 export type GalleryPhotoAdminItem = {
   id: string;
@@ -33,14 +38,8 @@ export async function getGalleryPhotosForAdmin(
   });
 }
 
-async function revalidatePublicSite() {
-  revalidatePath("/", "page");
-  refresh();
-}
-
-async function getSessionSchoolId(): Promise<string | null> {
-  const session = await getAdminSession();
-  return session?.schoolId ?? null;
+async function getSession() {
+  return getAdminSession();
 }
 
 async function findOwnedPhoto(photoId: string, schoolId: string) {
@@ -59,8 +58,8 @@ export async function createGalleryPhotoFormAction(
   _prevState: GalleryFormState,
   formData: FormData,
 ): Promise<GalleryFormState> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
@@ -69,26 +68,47 @@ export async function createGalleryPhotoFormAction(
     return { success: false, error: parsed.error };
   }
 
+  const uploadFile = getUploadedImageFromForm(formData);
+
   try {
     const lastPhoto = await prisma.galleryImage.findFirst({
-      where: { schoolId },
+      where: { schoolId: session.schoolId },
       orderBy: { sortOrder: "desc" },
       select: { sortOrder: true },
     });
 
-    await prisma.galleryImage.create({
+    const photo = await prisma.galleryImage.create({
       data: {
-        schoolId,
+        schoolId: session.schoolId,
         title: parsed.data.title,
         category: parsed.data.category,
-        imageUrl: parsed.data.imageUrl,
+        imageUrl: null,
         accentClass: parsed.data.accentClass,
         isFeatured: parsed.data.isFeatured,
         sortOrder: (lastPhoto?.sortOrder ?? -1) + 1,
       },
     });
 
-    await revalidatePublicSite();
+    if (uploadFile) {
+      const saved = await saveSchoolImageFile(
+        session.schoolId,
+        "gallery",
+        photo.id,
+        uploadFile,
+      );
+
+      if ("error" in saved) {
+        await prisma.galleryImage.delete({ where: { id: photo.id } });
+        return { success: false, error: saved.error };
+      }
+
+      await prisma.galleryImage.update({
+        where: { id: photo.id },
+        data: { imageUrl: saved.publicPath },
+      });
+    }
+
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return {
       success: true,
@@ -106,8 +126,8 @@ export async function updateGalleryPhotoFormAction(
   _prevState: GalleryFormState,
   formData: FormData,
 ): Promise<GalleryFormState> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
@@ -122,9 +142,28 @@ export async function updateGalleryPhotoFormAction(
   }
 
   try {
-    const photo = await findOwnedPhoto(photoId, schoolId);
+    const photo = await findOwnedPhoto(photoId, session.schoolId);
     if (!photo) {
       return { success: false, error: "Photo not found." };
+    }
+
+    let imageUrl = photo.imageUrl;
+    const uploadFile = getUploadedImageFromForm(formData);
+
+    if (uploadFile) {
+      await deleteUploadedImage(session.schoolId, "gallery", photo.imageUrl);
+      const saved = await saveSchoolImageFile(
+        session.schoolId,
+        "gallery",
+        photoId,
+        uploadFile,
+      );
+
+      if ("error" in saved) {
+        return { success: false, error: saved.error };
+      }
+
+      imageUrl = saved.publicPath;
     }
 
     await prisma.galleryImage.update({
@@ -132,13 +171,13 @@ export async function updateGalleryPhotoFormAction(
       data: {
         title: parsed.data.title,
         category: parsed.data.category,
-        imageUrl: parsed.data.imageUrl,
+        imageUrl,
         accentClass: parsed.data.accentClass,
         isFeatured: parsed.data.isFeatured,
       },
     });
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true, message: "Photo updated." };
   } catch (error) {
@@ -154,20 +193,21 @@ export async function deleteGalleryPhotoAction(photoId: string): Promise<{
   success: boolean;
   error?: string;
 }> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
   try {
-    const photo = await findOwnedPhoto(photoId, schoolId);
+    const photo = await findOwnedPhoto(photoId, session.schoolId);
     if (!photo) {
       return { success: false, error: "Photo not found." };
     }
 
+    await deleteUploadedImage(session.schoolId, "gallery", photo.imageUrl);
     await prisma.galleryImage.delete({ where: { id: photoId } });
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {
@@ -180,13 +220,13 @@ export async function setGalleryPhotoFeaturedAction(
   photoId: string,
   isFeatured: boolean,
 ): Promise<{ success: boolean; error?: string }> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
   try {
-    const photo = await findOwnedPhoto(photoId, schoolId);
+    const photo = await findOwnedPhoto(photoId, session.schoolId);
     if (!photo) {
       return { success: false, error: "Photo not found." };
     }
@@ -196,7 +236,7 @@ export async function setGalleryPhotoFeaturedAction(
       data: { isFeatured },
     });
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {
@@ -209,14 +249,14 @@ export async function moveGalleryPhotoAction(
   photoId: string,
   direction: "up" | "down",
 ): Promise<{ success: boolean; error?: string }> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
   try {
     const photos = await prisma.galleryImage.findMany({
-      where: { schoolId },
+      where: { schoolId: session.schoolId },
       orderBy: { sortOrder: "asc" },
       select: { id: true, sortOrder: true },
     });
@@ -245,7 +285,7 @@ export async function moveGalleryPhotoAction(
       }),
     ]);
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {

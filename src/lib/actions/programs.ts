@@ -1,9 +1,14 @@
 "use server";
 
-import { revalidatePath, refresh } from "next/cache";
 import { getAdminSession } from "@/lib/auth";
+import {
+  deleteUploadedImage,
+  getUploadedImageFromForm,
+  saveSchoolImageFile,
+} from "@/lib/image-upload";
 import { parseProgramInput } from "@/lib/programs";
 import { prisma } from "@/lib/prisma";
+import { revalidatePublicSchoolPages } from "@/lib/revalidate-public-site";
 
 export type ProgramAdminItem = {
   id: string;
@@ -33,14 +38,8 @@ export async function getProgramsForAdmin(
   return programs;
 }
 
-async function revalidatePublicSite() {
-  revalidatePath("/", "page");
-  refresh();
-}
-
-async function getSessionSchoolId(): Promise<string | null> {
-  const session = await getAdminSession();
-  return session?.schoolId ?? null;
+async function getSession() {
+  return getAdminSession();
 }
 
 async function findOwnedProgram(programId: string, schoolId: string) {
@@ -59,8 +58,8 @@ export async function createProgramFormAction(
   _prevState: ProgramFormState,
   formData: FormData,
 ): Promise<ProgramFormState> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
@@ -69,25 +68,46 @@ export async function createProgramFormAction(
     return { success: false, error: parsed.error };
   }
 
+  const uploadFile = getUploadedImageFromForm(formData);
+
   try {
     const lastProgram = await prisma.program.findFirst({
-      where: { schoolId },
+      where: { schoolId: session.schoolId },
       orderBy: { sortOrder: "desc" },
       select: { sortOrder: true },
     });
 
-    await prisma.program.create({
+    const program = await prisma.program.create({
       data: {
-        schoolId,
+        schoolId: session.schoolId,
         name: parsed.data.name,
         description: parsed.data.description,
-        imageUrl: parsed.data.imageUrl,
+        imageUrl: null,
         sortOrder: (lastProgram?.sortOrder ?? -1) + 1,
         isActive: true,
       },
     });
 
-    await revalidatePublicSite();
+    if (uploadFile) {
+      const saved = await saveSchoolImageFile(
+        session.schoolId,
+        "programs",
+        program.id,
+        uploadFile,
+      );
+
+      if ("error" in saved) {
+        await prisma.program.delete({ where: { id: program.id } });
+        return { success: false, error: saved.error };
+      }
+
+      await prisma.program.update({
+        where: { id: program.id },
+        data: { imageUrl: saved.publicPath },
+      });
+    }
+
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return {
       success: true,
@@ -106,8 +126,8 @@ export async function updateProgramFormAction(
   _prevState: ProgramFormState,
   formData: FormData,
 ): Promise<ProgramFormState> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
@@ -122,9 +142,28 @@ export async function updateProgramFormAction(
   }
 
   try {
-    const program = await findOwnedProgram(programId, schoolId);
+    const program = await findOwnedProgram(programId, session.schoolId);
     if (!program) {
       return { success: false, error: "Program not found." };
+    }
+
+    let imageUrl = program.imageUrl;
+    const uploadFile = getUploadedImageFromForm(formData);
+
+    if (uploadFile) {
+      await deleteUploadedImage(session.schoolId, "programs", program.imageUrl);
+      const saved = await saveSchoolImageFile(
+        session.schoolId,
+        "programs",
+        programId,
+        uploadFile,
+      );
+
+      if ("error" in saved) {
+        return { success: false, error: saved.error };
+      }
+
+      imageUrl = saved.publicPath;
     }
 
     await prisma.program.update({
@@ -132,11 +171,11 @@ export async function updateProgramFormAction(
       data: {
         name: parsed.data.name,
         description: parsed.data.description,
-        imageUrl: parsed.data.imageUrl,
+        imageUrl,
       },
     });
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true, message: "Program updated." };
   } catch (error) {
@@ -152,20 +191,21 @@ export async function deleteProgramAction(programId: string): Promise<{
   success: boolean;
   error?: string;
 }> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
   try {
-    const program = await findOwnedProgram(programId, schoolId);
+    const program = await findOwnedProgram(programId, session.schoolId);
     if (!program) {
       return { success: false, error: "Program not found." };
     }
 
+    await deleteUploadedImage(session.schoolId, "programs", program.imageUrl);
     await prisma.program.delete({ where: { id: programId } });
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {
@@ -178,13 +218,13 @@ export async function setProgramActiveAction(
   programId: string,
   isActive: boolean,
 ): Promise<{ success: boolean; error?: string }> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
   try {
-    const program = await findOwnedProgram(programId, schoolId);
+    const program = await findOwnedProgram(programId, session.schoolId);
     if (!program) {
       return { success: false, error: "Program not found." };
     }
@@ -194,7 +234,7 @@ export async function setProgramActiveAction(
       data: { isActive },
     });
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {
@@ -207,14 +247,14 @@ export async function moveProgramAction(
   programId: string,
   direction: "up" | "down",
 ): Promise<{ success: boolean; error?: string }> {
-  const schoolId = await getSessionSchoolId();
-  if (!schoolId) {
+  const session = await getSession();
+  if (!session) {
     return { success: false, error: "Please sign in again." };
   }
 
   try {
     const programs = await prisma.program.findMany({
-      where: { schoolId },
+      where: { schoolId: session.schoolId },
       orderBy: { sortOrder: "asc" },
       select: { id: true, sortOrder: true },
     });
@@ -243,7 +283,7 @@ export async function moveProgramAction(
       }),
     ]);
 
-    await revalidatePublicSite();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
     return { success: true };
   } catch (error) {

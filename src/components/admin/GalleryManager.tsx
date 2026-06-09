@@ -12,6 +12,7 @@ import {
   type GalleryFormState,
 } from "@/lib/actions/gallery";
 import { galleryAccentPresets, getAccentLabel } from "@/lib/gallery";
+import { ImageUploadField } from "@/components/admin/ImageUploadField";
 
 type GalleryManagerProps = {
   photos: GalleryPhotoAdminItem[];
@@ -57,8 +58,8 @@ export function GalleryManager({ photos }: GalleryManagerProps) {
       <section className="rounded-2xl border border-mauve-200 bg-white p-6 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-900">Add a Photo</h2>
         <p className="mt-1 text-sm text-slate-600">
-          Paste a photo link from your phone or computer storage. You can also
-          save a placeholder until a real photo is ready.
+          Upload a photo from your phone or computer. You can also save a colored
+          placeholder until a real photo is ready.
         </p>
 
         <form action={createAction} className="mt-6 space-y-5">
@@ -195,7 +196,8 @@ function PhotoCard({
             idPrefix={photo.id}
             defaultTitle={photo.title}
             defaultCategory={photo.category}
-            defaultImageUrl={photo.imageUrl ?? ""}
+            currentImageUrl={photo.imageUrl}
+            currentImageAlt={photo.title}
             defaultAccentClass={photo.accentClass}
             defaultFeatured={photo.isFeatured}
           />
@@ -305,7 +307,8 @@ type PhotoFieldsProps = {
   idPrefix: string;
   defaultTitle?: string;
   defaultCategory?: string;
-  defaultImageUrl?: string;
+  currentImageUrl?: string | null;
+  currentImageAlt?: string;
   defaultAccentClass?: string;
   defaultFeatured?: boolean;
 };
@@ -314,7 +317,8 @@ function PhotoFields({
   idPrefix,
   defaultTitle = "",
   defaultCategory = "",
-  defaultImageUrl = "",
+  currentImageUrl = null,
+  currentImageAlt = "Current photo",
   defaultAccentClass = galleryAccentPresets[1].value,
   defaultFeatured = false,
 }: PhotoFieldsProps) {
@@ -336,13 +340,10 @@ function PhotoFields({
         placeholder="e.g. Sports, Events, Academics"
         required
       />
-      <Field
-        id={`${idPrefix}-imageUrl`}
-        label="Photo Link"
-        name="imageUrl"
-        defaultValue={defaultImageUrl}
-        placeholder="https://example.com/photo.jpg"
-        hint="Optional. Paste a photo link. Leave blank to use a colored placeholder."
+      <ImageUploadField
+        id={`${idPrefix}-photo`}
+        currentImageUrl={currentImageUrl}
+        currentImageAlt={currentImageAlt}
       />
       <SelectField
         id={`${idPrefix}-accentClass`}
@@ -353,7 +354,7 @@ function PhotoFields({
           value: preset.value,
           label: preset.label,
         }))}
-        hint="Used when no photo link is provided."
+        hint="Used when no photo is uploaded."
       />
       <label className="flex items-center gap-3 text-sm text-slate-700">
         <input

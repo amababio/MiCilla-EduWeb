@@ -1,9 +1,9 @@
 "use server";
 
-import { revalidatePath, refresh } from "next/cache";
 import { getAdminSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { parseSchoolProfileInput } from "@/lib/school-profile";
+import { revalidatePublicSchoolPages } from "@/lib/revalidate-public-site";
 
 export type SchoolProfileData = {
   name: string;
@@ -48,6 +48,7 @@ export type SchoolProfileFormState = {
   success: boolean;
   error?: string;
   message?: string;
+  brandColor?: string;
 };
 
 export async function saveSchoolProfileFormAction(
@@ -63,12 +64,14 @@ export async function saveSchoolProfileFormAction(
   return {
     success: true,
     message: "Changes saved. Your public website has been updated.",
+    brandColor: result.brandColor,
   };
 }
 
 export async function updateSchoolProfile(formData: FormData): Promise<{
   success: boolean;
   error?: string;
+  brandColor?: string;
 }> {
   const session = await getAdminSession();
   if (!session) {
@@ -100,10 +103,9 @@ export async function updateSchoolProfile(formData: FormData): Promise<{
       },
     });
 
-    revalidatePath("/", "page");
-    refresh();
+    revalidatePublicSchoolPages(session.schoolSlug);
 
-    return { success: true };
+    return { success: true, brandColor: data.brandColor };
   } catch (error) {
     console.error("updateSchoolProfile failed:", error);
     return {

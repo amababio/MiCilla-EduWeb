@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from "next/cache";
 import { getDefaultSchoolSlug } from "@/lib/school-slug";
 import { prisma } from "@/lib/prisma";
 import {
@@ -20,6 +21,7 @@ function parseJsonArray<T>(value: unknown, fallback: T[] = []): T[] {
 export async function getPublicSchoolData(
   slug?: string,
 ): Promise<PublicSchoolData | null> {
+  noStore();
   const schoolSlug = slug ?? getDefaultSchoolSlug();
 
   const school = await prisma.school.findFirst({
