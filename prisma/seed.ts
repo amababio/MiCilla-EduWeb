@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { redemptionSchoolSeed } from "../src/data/seed-content";
+import { hashPassword } from "../src/lib/password";
 
 const prisma = new PrismaClient();
 
@@ -125,7 +126,36 @@ async function main() {
     })),
   });
 
+  const adminEmail = (
+    process.env.SEED_ADMIN_EMAIL ?? "admin@redemptioninternationalschool.edu.gh"
+  ).toLowerCase();
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "Admin123!";
+  const adminName = "School Admin";
+  const passwordHash = await hashPassword(adminPassword);
+
+  await prisma.admin.upsert({
+    where: {
+      schoolId_email: {
+        schoolId: school.id,
+        email: adminEmail,
+      },
+    },
+    update: {
+      name: adminName,
+      passwordHash,
+      isActive: true,
+    },
+    create: {
+      schoolId: school.id,
+      email: adminEmail,
+      name: adminName,
+      passwordHash,
+      isActive: true,
+    },
+  });
+
   console.log(`Seeded school: ${school.name} (${school.slug})`);
+  console.log(`Seeded admin: ${adminEmail}`);
 }
 
 main()
