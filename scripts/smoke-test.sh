@@ -77,6 +77,10 @@ CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-programs.html -w "%{htt
 check "GET /admin/programs" "200" "$CODE"
 check_contains "Programs page" "Programs" "/tmp/micilla-programs.html"
 
+CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-photos.html -w "%{http_code}" "$BASE/admin/photos")
+check "GET /admin/photos" "200" "$CODE"
+check_contains "Photos page" "Photos" "/tmp/micilla-photos.html"
+
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /dev/null -w "%{http_code}" -X POST "$BASE/api/admin/logout")
 check "POST logout" "200" "$CODE"
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /dev/null -w "%{http_code}" "$BASE/admin/dashboard")
@@ -86,7 +90,7 @@ check "GET /admin/dashboard after logout" "307" "$CODE"
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/")
 check "GET / after auth flow" "200" "$CODE"
 
-rm -f "$COOKIE" /tmp/micilla-home.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-login.json
+rm -f "$COOKIE" /tmp/micilla-home.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-login.json
 
 echo ""
 echo "=== Results: $PASS passed, $FAIL failed ==="

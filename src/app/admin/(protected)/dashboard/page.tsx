@@ -57,10 +57,9 @@ export default async function AdminDashboardPage() {
       <section className="rounded-2xl border border-dashed border-mauve-200 bg-white p-5">
         <h2 className="text-base font-semibold text-slate-900">Next steps</h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          Use the menu to update your school profile, homepage content, and
-          programs. Photo, achievement, notice, and file tools will be added in
-          upcoming phases. Preview your public website anytime to see live
-          changes.
+          Use the menu to update your school profile, homepage content, programs,
+          and photos. Achievement, notice, and file tools will be added in upcoming
+          phases. Preview your public website anytime to see live changes.
         </p>
       </section>
     </div>

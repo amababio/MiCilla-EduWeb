@@ -84,7 +84,9 @@ export async function getPublicSchoolData(
     whyChooseUsIntro: settings.whyChooseUsIntro,
     gallery: school.galleryImages.map((image) => ({
       title: image.title,
+      category: image.category,
       accent: image.accentClass,
+      imageUrl: image.imageUrl,
     })),
     achievements: {
       subtitle: settings.achievementsSubtitle,

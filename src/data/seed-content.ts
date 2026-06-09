@@ -90,12 +90,12 @@ export const redemptionSchoolSeed = {
     },
   ],
   gallery: [
-    { title: "Classroom Learning", accentClass: "from-mauve-200 to-mauve-400" },
-    { title: "Cultural Day", accentClass: "from-mauve-300 to-mauve-500" },
-    { title: "Sports Day", accentClass: "from-mauve-400 to-mauve-600" },
-    { title: "Graduation", accentClass: "from-mauve-300 to-mauve-600" },
-    { title: "ICT Lessons", accentClass: "from-mauve-200 to-mauve-500" },
-    { title: "Reading Time", accentClass: "from-mauve-100 to-mauve-400" },
+    { title: "Classroom Learning", category: "Academics", accentClass: "from-mauve-200 to-mauve-400" },
+    { title: "Cultural Day", category: "Events", accentClass: "from-mauve-300 to-mauve-500" },
+    { title: "Sports Day", category: "Sports", accentClass: "from-mauve-400 to-mauve-600" },
+    { title: "Graduation", category: "Events", accentClass: "from-mauve-300 to-mauve-600" },
+    { title: "ICT Lessons", category: "Academics", accentClass: "from-mauve-200 to-mauve-500" },
+    { title: "Reading Time", category: "Academics", accentClass: "from-mauve-100 to-mauve-400" },
   ],
   achievements: [
     {

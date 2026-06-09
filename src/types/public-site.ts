@@ -5,7 +5,9 @@ export type AboutValue = {
 
 export type GalleryItem = {
   title: string;
+  category: string;
   accent: string;
+  imageUrl: string | null;
 };
 
 export type AchievementCard = {

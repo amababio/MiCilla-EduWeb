@@ -96,6 +96,7 @@ async function main() {
     data: seed.gallery.map((item, index) => ({
       schoolId: school.id,
       title: item.title,
+      category: item.category,
       accentClass: item.accentClass,
       sortOrder: index,
       isFeatured: true,

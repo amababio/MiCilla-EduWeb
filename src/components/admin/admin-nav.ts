@@ -10,7 +10,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "School Profile", href: "/admin/school-profile" },
   { label: "Homepage Content", href: "/admin/homepage-content" },
   { label: "Programs", href: "/admin/programs" },
-  { label: "Photos", href: "#", soon: true },
+  { label: "Photos", href: "/admin/photos" },
   { label: "Achievements", href: "#", soon: true },
   { label: "Notices", href: "#", soon: true },
   { label: "Files", href: "#", soon: true },

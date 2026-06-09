@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 7 — Programs Management
+Phase 8 — Gallery Management
 
 ## Stack
 
@@ -79,6 +79,12 @@ Admins can update hero message, admissions text, about section, Why Choose Us po
 - Edit page: [http://localhost:3000/admin/programs](http://localhost:3000/admin/programs)
 
 Admins can add, edit, hide, reorder, and remove school programs. Optional photo links appear on the public Programs section.
+
+## Photos (Phase 8)
+
+- Edit page: [http://localhost:3000/admin/photos](http://localhost:3000/admin/photos)
+
+Admins can add photo links, set categories, mark featured photos, reorder, and remove items. Featured photos appear in the homepage gallery preview.
 
 Default seeded admin comes from your `.env` file:
 
