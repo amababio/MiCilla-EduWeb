@@ -4,6 +4,7 @@ import {
   getCategoryLabel,
 } from "@/lib/achievements";
 import { getAnnouncementCategoryLabel } from "@/lib/announcements";
+import { getDownloadCategoryLabel } from "@/lib/downloads";
 import {
   defaultNavLinks,
   type AboutValue,
@@ -118,6 +119,9 @@ export async function getPublicSchoolData(
     downloads: school.downloads.map((item) => ({
       title: item.title,
       description: item.description,
+      category: item.category,
+      categoryLabel: getDownloadCategoryLabel(item.category),
+      fileUrl: item.fileUrl,
     })),
     contact: {
       headline: settings.contactHeadline,

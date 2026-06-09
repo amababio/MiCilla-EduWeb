@@ -7,6 +7,10 @@ type AdmissionsSectionProps = {
 };
 
 export function AdmissionsSection({ school }: AdmissionsSectionProps) {
+  const admissionForm = school.downloads.find(
+    (item) => item.category === "admission_form" && item.fileUrl,
+  );
+
   return (
     <section id="admissions" className="bg-white py-16 sm:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
@@ -31,13 +35,20 @@ export function AdmissionsSection({ school }: AdmissionsSectionProps) {
           </div>
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-            <button
-              type="button"
-              className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"
-              title="Demo placeholder — download will work in a later phase"
-            >
-              Download Admission Form (Demo)
-            </button>
+            {admissionForm ? (
+              <a
+                href={admissionForm.fileUrl!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"
+              >
+                Download Admission Form
+              </a>
+            ) : (
+              <span className="inline-flex items-center justify-center rounded-full border border-mauve-200 bg-white px-6 py-3 text-sm font-semibold text-slate-500">
+                Admission form link coming soon
+              </span>
+            )}
             <a
               href={phoneToTel(school.phone)}
               className="inline-flex items-center justify-center rounded-full border-2 border-mauve-300 bg-white px-6 py-3 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50"

@@ -29,6 +29,9 @@ export type AnnouncementItem = {
 export type DownloadItem = {
   title: string;
   description: string;
+  category: string;
+  categoryLabel: string;
+  fileUrl: string | null;
 };
 
 export type ProgramItem = {

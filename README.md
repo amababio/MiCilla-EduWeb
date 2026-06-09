@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 10 — Announcements and Events
+Phase 11 — Downloads Management
 
 ## Stack
 
@@ -97,6 +97,12 @@ Admins can add BECE results, competitions, awards, and innovation entries. Priva
 - Edit page: [http://localhost:3000/admin/notices](http://localhost:3000/admin/notices)
 
 Admins can add, edit, publish, reorder, and remove school announcements. Categories include admissions, events, academics, PTA, and more. Published notices appear on the public homepage.
+
+## Files (Phase 11)
+
+- Edit page: [http://localhost:3000/admin/files](http://localhost:3000/admin/files)
+
+Admins can add file links for admission forms, prospectus, book lists, and fee notices. Published files appear in the public Downloads section and the admissions form button when linked.
 
 Default seeded admin comes from your `.env` file:
 

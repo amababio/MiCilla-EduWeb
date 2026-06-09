@@ -13,7 +13,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Photos", href: "/admin/photos" },
   { label: "Achievements", href: "/admin/achievements" },
   { label: "Notices", href: "/admin/notices" },
-  { label: "Files", href: "#", soon: true },
+  { label: "Files", href: "/admin/files" },
 ];
 
 export function getNavItemsForPath(currentPath: string): AdminNavItem[] {

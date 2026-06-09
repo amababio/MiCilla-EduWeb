@@ -130,6 +130,7 @@ model Download {
   school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   title       String
   description String
+  category    String   @default("general")
   fileUrl     String?
   sortOrder   Int      @default(0)
   isPublished Boolean  @default(true)

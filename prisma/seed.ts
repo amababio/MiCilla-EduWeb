@@ -137,6 +137,8 @@ async function main() {
       schoolId: school.id,
       title: item.title,
       description: item.description,
+      category: item.category,
+      fileUrl: item.fileUrl ?? null,
       sortOrder: index,
       isPublished: true,
     })),

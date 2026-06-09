@@ -153,18 +153,26 @@ export const redemptionSchoolSeed = {
     {
       title: "Admission Form",
       description: "Download the school admission form.",
+      category: "admission_form",
+      fileUrl: null,
     },
     {
       title: "School Prospectus",
       description: "Learn about our programs and values.",
+      category: "prospectus",
+      fileUrl: null,
     },
     {
       title: "Book List",
       description: "Required textbooks and materials by level.",
+      category: "book_list",
+      fileUrl: null,
     },
     {
       title: "Term Calendar",
       description: "Important dates for the academic year.",
+      category: "calendar",
+      fileUrl: null,
     },
   ],
 } as const;

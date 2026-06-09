@@ -58,8 +58,8 @@ export default async function AdminDashboardPage() {
         <h2 className="text-base font-semibold text-slate-900">Next steps</h2>
         <p className="mt-2 text-sm leading-relaxed text-slate-600">
           Use the menu to update your school profile, homepage content, programs,
-          photos, and achievements. File downloads will be added in upcoming
-          phases. Preview your public website anytime to see live changes.
+          photos, achievements, and notices. Preview your public website anytime
+          to see live changes.
         </p>
       </section>
     </div>
