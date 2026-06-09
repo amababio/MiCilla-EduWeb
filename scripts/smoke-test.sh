@@ -65,6 +65,10 @@ CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-dash.html -w "%{http_co
 check "GET /admin/dashboard (auth)" "200" "$CODE"
 check_contains "Dashboard has school name" "Redemption International School" "/tmp/micilla-dash.html"
 
+CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-homepage-content.html -w "%{http_code}" "$BASE/admin/homepage-content")
+check "GET /admin/homepage-content" "200" "$CODE"
+check_contains "Homepage content form" "Homepage Content" "/tmp/micilla-homepage-content.html"
+
 CODE=$(curl -s -c "$COOKIE" -b "$COOKIE" -o /tmp/micilla-profile.html -w "%{http_code}" "$BASE/admin/school-profile")
 check "GET /admin/school-profile" "200" "$CODE"
 check_contains "School profile form" "School Profile" "/tmp/micilla-profile.html"
@@ -78,7 +82,7 @@ check "GET /admin/dashboard after logout" "307" "$CODE"
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/")
 check "GET / after auth flow" "200" "$CODE"
 
-rm -f "$COOKIE" /tmp/micilla-home.html /tmp/micilla-dash.html /tmp/micilla-profile.html /tmp/micilla-login.json
+rm -f "$COOKIE" /tmp/micilla-home.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-login.json
 
 echo ""
 echo "=== Results: $PASS passed, $FAIL failed ==="

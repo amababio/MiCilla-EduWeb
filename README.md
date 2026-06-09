@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 5 — School Profile and Branding
+Phase 6 — Homepage Content Management
 
 ## Stack
 
@@ -67,6 +67,12 @@ The dashboard includes a sidebar, summary cards, Preview Website, and Sign Out.
 - Edit page: [http://localhost:3000/admin/school-profile](http://localhost:3000/admin/school-profile)
 
 Admins can update school name, motto, contact details, logo link, and brand color. Saving changes updates the public website.
+
+## Homepage Content (Phase 6)
+
+- Edit page: [http://localhost:3000/admin/homepage-content](http://localhost:3000/admin/homepage-content)
+
+Admins can update hero message, admissions text, about section, Why Choose Us points, and contact messages. Saving changes updates the public homepage.
 
 Default seeded admin comes from your `.env` file:
 

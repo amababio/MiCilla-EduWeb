@@ -30,7 +30,7 @@ export function HeroSection({ school }: HeroSectionProps) {
               href="#admissions"
               className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-md transition hover:bg-mauve-600"
             >
-              Apply for Admission
+              {school.heroCtaPrimary}
             </a>
             <a
               href={phoneToWhatsApp(school.whatsapp)}
@@ -38,7 +38,7 @@ export function HeroSection({ school }: HeroSectionProps) {
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center rounded-full border-2 border-mauve-300 bg-white px-6 py-3 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50"
             >
-              Chat on WhatsApp
+              {school.heroCtaSecondary}
             </a>
           </div>
         </div>

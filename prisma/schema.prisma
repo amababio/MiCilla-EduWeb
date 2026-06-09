@@ -39,16 +39,21 @@ model WebsiteSettings {
   schoolId              String   @unique
   school                School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   heroDescription       String
+  heroCtaPrimary        String   @default("Apply for Admission")
+  heroCtaSecondary      String   @default("Chat on WhatsApp")
   admissionsHeadline    String
   admissionsDescription String
   admissionLevels       Json
   aboutDescription      String
   aboutValues           Json
+  whyChooseUsIntro      String   @default("Parents trust us for quality teaching, strong values, and a welcoming school community.")
   whyChooseUs           Json
   achievementsSubtitle  String
   achievementsNote      String
   contactHeadline       String
   contactDescription    String
+  contactCtaHeadline    String   @default("Chat with us on WhatsApp")
+  contactCtaDescription String   @default("The fastest way to ask about admissions, school visits, and placement availability.")
   poweredByFooter       String
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt

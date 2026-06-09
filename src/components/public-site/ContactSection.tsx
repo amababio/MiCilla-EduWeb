@@ -91,11 +91,10 @@ export function ContactSection({ school }: ContactSectionProps) {
               Quick Contact
             </p>
             <h3 className="mt-2 text-2xl font-bold">
-              Chat with us on WhatsApp
+              {school.contact.ctaHeadline}
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-white/90">
-              The fastest way to ask about admissions, school visits, and
-              placement availability.
+              {school.contact.ctaDescription}
             </p>
             <a
               href={phoneToWhatsApp(school.whatsapp)}

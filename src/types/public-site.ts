@@ -49,6 +49,8 @@ export type PublicSchoolData = {
   logoUrl: string | null;
   brandColor: string;
   heroDescription: string;
+  heroCtaPrimary: string;
+  heroCtaSecondary: string;
   admissions: {
     headline: string;
     description: string;
@@ -60,6 +62,7 @@ export type PublicSchoolData = {
   };
   programs: ProgramItem[];
   whyChooseUs: string[];
+  whyChooseUsIntro: string;
   gallery: GalleryItem[];
   achievements: {
     subtitle: string;
@@ -71,6 +74,8 @@ export type PublicSchoolData = {
   contact: {
     headline: string;
     description: string;
+    ctaHeadline: string;
+    ctaDescription: string;
   };
   footer: {
     poweredBy: string;

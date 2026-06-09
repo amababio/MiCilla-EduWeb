@@ -64,6 +64,8 @@ export async function getPublicSchoolData(
     logoUrl: school.logoUrl,
     brandColor: school.brandColor,
     heroDescription: settings.heroDescription,
+    heroCtaPrimary: settings.heroCtaPrimary,
+    heroCtaSecondary: settings.heroCtaSecondary,
     admissions: {
       headline: settings.admissionsHeadline,
       description: settings.admissionsDescription,
@@ -78,6 +80,7 @@ export async function getPublicSchoolData(
       description: program.description,
     })),
     whyChooseUs: parseJsonArray<string>(settings.whyChooseUs),
+    whyChooseUsIntro: settings.whyChooseUsIntro,
     gallery: school.galleryImages.map((image) => ({
       title: image.title,
       accent: image.accentClass,
@@ -103,6 +106,8 @@ export async function getPublicSchoolData(
     contact: {
       headline: settings.contactHeadline,
       description: settings.contactDescription,
+      ctaHeadline: settings.contactCtaHeadline,
+      ctaDescription: settings.contactCtaDescription,
     },
     footer: {
       poweredBy: settings.poweredByFooter,

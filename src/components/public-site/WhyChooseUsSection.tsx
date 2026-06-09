@@ -13,8 +13,7 @@ export function WhyChooseUsSection({ school }: WhyChooseUsSectionProps) {
             Why Choose {school.name}?
           </h2>
           <p className="mt-3 text-base leading-relaxed text-white/90 sm:text-lg">
-            Parents trust us for quality teaching, strong values, and a welcoming
-            school community.
+            {school.whyChooseUsIntro}
           </p>
         </div>
 

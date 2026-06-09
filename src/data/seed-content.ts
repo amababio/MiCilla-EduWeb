@@ -15,6 +15,8 @@ export const redemptionSchoolSeed = {
   websiteSettings: {
     heroDescription:
       "A safe, disciplined, and child-friendly school environment focused on academic excellence, moral training, and strong foundational learning.",
+    heroCtaPrimary: "Apply for Admission",
+    heroCtaSecondary: "Chat on WhatsApp",
     admissionsHeadline: "Admissions Open for 2026/2027 Academic Year",
     admissionsDescription:
       "We are currently accepting learners into Crèche, Nursery, KG, Primary, and JHS. Contact our admissions office for enquiries, school visit arrangements, and admission requirements.",
@@ -46,6 +48,8 @@ export const redemptionSchoolSeed = {
       "Active parent communication",
       "Child-friendly classrooms",
     ],
+    whyChooseUsIntro:
+      "Parents trust us for quality teaching, strong values, and a welcoming school community.",
     achievementsSubtitle:
       "Celebrating academic performance, competitions, student creativity, and teacher innovation.",
     achievementsNote:
@@ -53,6 +57,9 @@ export const redemptionSchoolSeed = {
     contactHeadline: "Have questions about admissions?",
     contactDescription:
       "Contact the school office or chat with us on WhatsApp. We are happy to help with enquiries, visits, and placement information.",
+    contactCtaHeadline: "Chat with us on WhatsApp",
+    contactCtaDescription:
+      "The fastest way to ask about admissions, school visits, and placement availability.",
     poweredByFooter: "Powered by MiCilla Technologies",
   },
   programs: [
