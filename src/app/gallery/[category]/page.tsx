@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import {
+  Header,
+  PUBLIC_SITE_HEADER_OFFSET_CLASS,
+} from "@/components/public-site/Header";
 import { GalleryCategoryPage } from "@/components/public-site/GalleryCategoryPage";
+import { MobileContactBar } from "@/components/public-site/MobileContactBar";
+import { SchoolBrandStyles } from "@/components/public-site/SchoolBrandStyles";
 import { getGalleryCategoryPageDataForDefaultSchool } from "@/lib/get-gallery-category-page";
+import { getPublicSchoolData } from "@/lib/get-public-school-data";
+import { getDefaultSchoolSlug } from "@/lib/school-slug";
 
 export const dynamic = "force-dynamic";
 
@@ -27,11 +35,23 @@ export default async function DefaultSchoolGalleryCategoryPage({
   params,
 }: PageProps) {
   const { category } = await params;
-  const data = await getGalleryCategoryPageDataForDefaultSchool(category);
+  const [data, school] = await Promise.all([
+    getGalleryCategoryPageDataForDefaultSchool(category),
+    getPublicSchoolData(getDefaultSchoolSlug()),
+  ]);
 
-  if (!data) {
+  if (!data || !school) {
     notFound();
   }
 
-  return <GalleryCategoryPage data={data} />;
+  return (
+    <>
+      <SchoolBrandStyles brandColor={school.brandColor} />
+      <Header school={school} />
+      <main className={PUBLIC_SITE_HEADER_OFFSET_CLASS}>
+        <GalleryCategoryPage data={data} />
+      </main>
+      <MobileContactBar school={school} />
+    </>
+  );
 }

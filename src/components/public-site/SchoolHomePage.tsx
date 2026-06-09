@@ -1,5 +1,5 @@
 import type { PublicSchoolData } from "@/types/public-site";
-import { Header } from "@/components/public-site/Header";
+import { Header, PUBLIC_SITE_HEADER_OFFSET_CLASS } from "@/components/public-site/Header";
 import { HeroSection } from "@/components/public-site/HeroSection";
 import { AdmissionsSection } from "@/components/public-site/AdmissionsSection";
 import { AboutSection } from "@/components/public-site/AboutSection";
@@ -27,7 +27,7 @@ export function SchoolHomePage({ school }: SchoolHomePageProps) {
       <SchoolBrandStyles brandColor={school.brandColor} />
       <HomepageMotionProvider>
         <Header school={school} />
-        <main className="pb-20 lg:pb-0">
+        <main className={`${PUBLIC_SITE_HEADER_OFFSET_CLASS} pb-20 lg:pb-0`}>
           <HeroSection school={school} />
           <AdmissionsSection school={school} />
           <AboutSection school={school} />

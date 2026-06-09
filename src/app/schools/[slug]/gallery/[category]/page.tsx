@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import {
+  Header,
+  PUBLIC_SITE_HEADER_OFFSET_CLASS,
+} from "@/components/public-site/Header";
 import { GalleryCategoryPage } from "@/components/public-site/GalleryCategoryPage";
+import { MobileContactBar } from "@/components/public-site/MobileContactBar";
+import { SchoolBrandStyles } from "@/components/public-site/SchoolBrandStyles";
 import { getGalleryCategoryPageData } from "@/lib/get-gallery-category-page";
+import { getPublicSchoolData } from "@/lib/get-public-school-data";
 
 export const dynamic = "force-dynamic";
 
@@ -25,11 +32,23 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function SchoolGalleryCategoryPage({ params }: PageProps) {
   const { slug, category } = await params;
-  const data = await getGalleryCategoryPageData(slug, category);
+  const [data, school] = await Promise.all([
+    getGalleryCategoryPageData(slug, category),
+    getPublicSchoolData(slug),
+  ]);
 
-  if (!data) {
+  if (!data || !school) {
     notFound();
   }
 
-  return <GalleryCategoryPage data={data} />;
+  return (
+    <>
+      <SchoolBrandStyles brandColor={school.brandColor} />
+      <Header school={school} />
+      <main className={PUBLIC_SITE_HEADER_OFFSET_CLASS}>
+        <GalleryCategoryPage data={data} />
+      </main>
+      <MobileContactBar school={school} />
+    </>
+  );
 }
