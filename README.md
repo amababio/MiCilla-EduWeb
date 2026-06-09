@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 8 — Gallery Management
+Phase 9 — Excellence & Achievements Management
 
 ## Stack
 
@@ -85,6 +85,12 @@ Admins can add, edit, hide, reorder, and remove school programs. Optional photo 
 - Edit page: [http://localhost:3000/admin/photos](http://localhost:3000/admin/photos)
 
 Admins can add photo links, set categories, mark featured photos, reorder, and remove items. Featured photos appear in the homepage gallery preview.
+
+## Achievements (Phase 9)
+
+- Edit page: [http://localhost:3000/admin/achievements](http://localhost:3000/admin/achievements)
+
+Admins can add BECE results, competitions, awards, and innovation entries. Privacy display options control how student names appear publicly. Published achievements update the homepage Excellence section.
 
 Default seeded admin comes from your `.env` file:
 

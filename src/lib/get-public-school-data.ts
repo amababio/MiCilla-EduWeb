@@ -1,5 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import {
+  getAchievementDisplayLabel,
+  getCategoryLabel,
+} from "@/lib/achievements";
+import {
   defaultNavLinks,
   type AboutValue,
   type PublicSchoolData,
@@ -94,6 +98,13 @@ export async function getPublicSchoolData(
       cards: school.achievements.map((item) => ({
         title: item.title,
         description: item.description,
+        category: item.category,
+        categoryLabel: getCategoryLabel(item.category),
+        displayLabel: getAchievementDisplayLabel(
+          item.privacyDisplay,
+          item.subjectName,
+          item.subjectClass,
+        ),
       })),
     },
     announcements: school.announcements.map((item) => ({

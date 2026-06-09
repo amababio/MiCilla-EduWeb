@@ -11,7 +11,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Homepage Content", href: "/admin/homepage-content" },
   { label: "Programs", href: "/admin/programs" },
   { label: "Photos", href: "/admin/photos" },
-  { label: "Achievements", href: "#", soon: true },
+  { label: "Achievements", href: "/admin/achievements" },
   { label: "Notices", href: "#", soon: true },
   { label: "Files", href: "#", soon: true },
 ];

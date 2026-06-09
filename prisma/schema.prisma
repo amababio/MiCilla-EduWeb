@@ -91,16 +91,19 @@ model GalleryImage {
 }
 
 model Achievement {
-  id          String   @id @default(cuid())
-  schoolId    String
-  school      School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  title       String
-  description String
-  category    String   @default("preview")
-  sortOrder   Int      @default(0)
-  isPublished Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id             String   @id @default(cuid())
+  schoolId       String
+  school         School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  title          String
+  description    String
+  category       String   @default("school_project")
+  privacyDisplay String   @default("hide")
+  subjectName    String?
+  subjectClass   String?
+  sortOrder      Int      @default(0)
+  isPublished    Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([schoolId, sortOrder])
 }

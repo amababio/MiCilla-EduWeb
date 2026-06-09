@@ -13,6 +13,9 @@ export type GalleryItem = {
 export type AchievementCard = {
   title: string;
   description: string;
+  category: string;
+  categoryLabel: string;
+  displayLabel: string | null;
 };
 
 export type AnnouncementItem = {

@@ -53,7 +53,7 @@ export const redemptionSchoolSeed = {
     achievementsSubtitle:
       "Celebrating academic performance, competitions, student creativity, and teacher innovation.",
     achievementsNote:
-      "Full achievements will be managed from the school dashboard in a later phase.",
+      "Individual student names are shown only when approved by the school. Contact the office for full records.",
     contactHeadline: "Have questions about admissions?",
     contactDescription:
       "Contact the school office or chat with us on WhatsApp. We are happy to help with enquiries, visits, and placement information.",
@@ -99,19 +99,31 @@ export const redemptionSchoolSeed = {
   ],
   achievements: [
     {
-      title: "Academic Performance",
+      title: "Strong BECE Preparation",
       description:
-        "Strong preparation for internal assessments, mock examinations, and BECE success.",
+        "Our learners receive focused revision, mock examinations, and guidance to perform confidently in BECE.",
+      category: "bece",
+      privacyDisplay: "hide",
+      subjectName: null,
+      subjectClass: null,
     },
     {
-      title: "Competitions & Awards",
+      title: "Inter-School Quiz Champions",
       description:
-        "Our learners are encouraged to participate in quizzes, debates, sports, cultural activities, and academic competitions.",
+        "Our upper primary team placed first in a district quiz competition after weeks of practice and teamwork.",
+      category: "competition",
+      privacyDisplay: "class_only",
+      subjectName: null,
+      subjectClass: "Primary 6",
     },
     {
-      title: "Innovation Showcase",
+      title: "Student Science Project",
       description:
-        "We celebrate student projects, creative work, practical learning activities, and teacher-led classroom innovations.",
+        "A practical water filtration project was showcased during our school science fair.",
+      category: "student_innovation",
+      privacyDisplay: "first_name",
+      subjectName: "Ama Mensah",
+      subjectClass: "JHS 2",
     },
   ],
   announcements: [
