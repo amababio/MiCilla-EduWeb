@@ -3,11 +3,19 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export function AdminLoginForm() {
+type AdminLoginFormProps = {
+  defaultEmail?: string;
+  defaultPassword?: string;
+};
+
+export function AdminLoginForm({
+  defaultEmail = "",
+  defaultPassword = "",
+}: AdminLoginFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(defaultEmail);
+  const [password, setPassword] = useState(defaultPassword);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -20,7 +28,10 @@ export function AdminLoginForm() {
       const response = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
       });
 
       const data = (await response.json()) as { error?: string };
@@ -53,7 +64,7 @@ export function AdminLoginForm() {
           id="email"
           name="email"
           type="email"
-          autoComplete="email"
+          autoComplete="username"
           required
           value={email}
           onChange={(event) => setEmail(event.target.value)}

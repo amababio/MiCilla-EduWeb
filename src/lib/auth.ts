@@ -28,6 +28,7 @@ export async function authenticateAdmin(
   password: string,
 ): Promise<AdminSession | null> {
   const normalizedEmail = email.trim().toLowerCase();
+  const normalizedPassword = password.trim();
   const schoolSlug =
     process.env.DEFAULT_SCHOOL_SLUG ?? "redemption-international-school";
 
@@ -44,7 +45,7 @@ export async function authenticateAdmin(
     return null;
   }
 
-  const isValid = await verifyPassword(password, admin.passwordHash);
+  const isValid = await verifyPassword(normalizedPassword, admin.passwordHash);
   if (!isValid) {
     return null;
   }

@@ -11,12 +11,13 @@ import { AnnouncementsPreview } from "@/components/public-site/AnnouncementsPrev
 import { DownloadsPreview } from "@/components/public-site/DownloadsPreview";
 import { ContactSection } from "@/components/public-site/ContactSection";
 import { Footer } from "@/components/public-site/Footer";
-import { getPublicSchoolData } from "@/lib/get-public-school-data";
+import { getCachedPublicSchoolData } from "@/lib/get-public-school-data";
 
-export const dynamic = "force-dynamic";
+/** Regenerate the cached homepage every 5 minutes when content changes. */
+export const revalidate = 300;
 
 export default async function Home() {
-  const school = await getPublicSchoolData();
+  const school = await getCachedPublicSchoolData();
 
   if (!school) {
     notFound();

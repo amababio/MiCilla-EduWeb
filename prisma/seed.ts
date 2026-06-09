@@ -127,25 +127,17 @@ async function main() {
   });
 
   const adminEmail = (
-    process.env.SEED_ADMIN_EMAIL ?? "admin@redemptioninternationalschool.edu.gh"
+    process.env.SEED_ADMIN_EMAIL ?? "admin@example.com"
   ).toLowerCase();
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "Admin123!";
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? "admin123!";
   const adminName = "School Admin";
   const passwordHash = await hashPassword(adminPassword);
 
-  await prisma.admin.upsert({
-    where: {
-      schoolId_email: {
-        schoolId: school.id,
-        email: adminEmail,
-      },
-    },
-    update: {
-      name: adminName,
-      passwordHash,
-      isActive: true,
-    },
-    create: {
+  // Keep one admin account per school (avoids stale accounts when email changes).
+  await prisma.admin.deleteMany({ where: { schoolId: school.id } });
+
+  await prisma.admin.create({
+    data: {
       schoolId: school.id,
       email: adminEmail,
       name: adminName,

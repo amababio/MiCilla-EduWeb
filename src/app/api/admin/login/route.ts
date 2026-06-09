@@ -13,7 +13,7 @@ export async function POST(request: Request) {
     };
 
     const email = body.email?.trim() ?? "";
-    const password = body.password ?? "";
+    const password = body.password?.trim() ?? "";
 
     if (!email || !password) {
       return NextResponse.json(

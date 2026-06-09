@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 3 — Admin Authentication
+Phase 4 — Admin Dashboard Shell
 
 ## Stack
 
@@ -55,15 +55,24 @@ Open [http://localhost:3000](http://localhost:3000).
 
 The homepage loads school content from PostgreSQL (seeded with Redemption International School).
 
-## Admin Sign In (Phase 3)
+## Admin Sign In (Phase 3–4)
 
 - Login page: [http://localhost:3000/admin/login](http://localhost:3000/admin/login)
-- Protected dashboard: [http://localhost:3000/admin/dashboard](http://localhost:3000/admin/dashboard)
+- Dashboard: [http://localhost:3000/admin/dashboard](http://localhost:3000/admin/dashboard)
 
-Default seeded admin (change after first login in a later phase):
+The dashboard includes a sidebar, summary cards, Preview Website, and Sign Out.
 
-- Email: `admin@redemptioninternationalschool.edu.gh`
-- Password: `Admin123!`
+Default seeded admin comes from your `.env` file:
+
+- `SEED_ADMIN_EMAIL`
+- `SEED_ADMIN_PASSWORD`
+
+After changing those values, run `npm run db:seed` again.
+
+Example defaults in `.env.example`:
+
+- Email: `admin@example.com`
+- Password: `admin123!`
 
 ## Useful Database Commands
 

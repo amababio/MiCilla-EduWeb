@@ -10,6 +10,8 @@ export const prisma =
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   });
 
-if (process.env.NODE_ENV !== "production") {
+if (!globalForPrisma.prisma) {
   globalForPrisma.prisma = prisma;
+  // Warm the connection pool so the first page load is not waiting on connect.
+  void prisma.$connect();
 }
