@@ -12,6 +12,7 @@ import { DownloadsPreview } from "@/components/public-site/DownloadsPreview";
 import { SchedulePreview } from "@/components/public-site/SchedulePreview";
 import { ContactSection } from "@/components/public-site/ContactSection";
 import { Footer } from "@/components/public-site/Footer";
+import { MobileContactBar } from "@/components/public-site/MobileContactBar";
 import { SchoolBrandStyles } from "@/components/public-site/SchoolBrandStyles";
 
 type SchoolHomePageProps = {
@@ -23,7 +24,7 @@ export function SchoolHomePage({ school }: SchoolHomePageProps) {
     <>
       <SchoolBrandStyles brandColor={school.brandColor} />
       <Header school={school} />
-      <main>
+      <main className="pb-20 lg:pb-0">
         <HeroSection school={school} />
         <AdmissionsSection school={school} />
         <AboutSection school={school} />
@@ -37,6 +38,7 @@ export function SchoolHomePage({ school }: SchoolHomePageProps) {
         <ContactSection school={school} />
       </main>
       <Footer school={school} />
+      <MobileContactBar school={school} />
     </>
   );
 }

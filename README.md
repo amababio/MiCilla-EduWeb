@@ -4,7 +4,7 @@ Reusable school website platform for private basic schools in Ghana.
 
 ## Current Phase
 
-Phase 14 — Optional Schedule Module
+Phase 15 — Public Polish and Mobile Optimization
 
 ## Stack
 
@@ -133,6 +133,17 @@ Default seeded super admin:
 - Edit page: [http://localhost:3000/admin/schedule](http://localhost:3000/admin/schedule)
 
 Admins can manage classes, subjects/activities, class timetables, exam timetables, term calendar events, and daily routines for crèche/KG. Published schedule items appear in the public Schedule section on the homepage.
+
+## Public Polish (Phase 15)
+
+Improvements for parents on phones and for sales demos:
+
+- Mobile-friendly navigation with scroll lock and a fixed Call/WhatsApp bar
+- Loading skeleton while public pages fetch school data
+- Polished school-not-found and global not-found pages
+- Empty states when a section has no published content yet
+- Safer image loading with lazy load and broken-link fallbacks
+- Richer footer with office hours, quick links, and contact actions
 
 Default seeded admin comes from your `.env` file:
 

@@ -53,8 +53,9 @@ CODE=$(curl -s -o /tmp/micilla-school-gbs.html -w "%{http_code}" "$BASE/schools/
 check "GET /schools/grace-basic-school" "200" "$CODE"
 check_contains "School route has GBS name" "Grace Basic School" "/tmp/micilla-school-gbs.html"
 
-CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/schools/not-a-real-school")
+CODE=$(curl -s -o /tmp/micilla-school-not-found.html -w "%{http_code}" "$BASE/schools/not-a-real-school")
 check "GET /schools/not-a-real-school" "404" "$CODE"
+check_contains "Not found page" "Page not found" "/tmp/micilla-school-not-found.html"
 
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/admin/login")
 check "GET /admin/login" "200" "$CODE"
@@ -142,7 +143,7 @@ check_contains "Super admin dashboard" "All Schools" "/tmp/micilla-super-dash.ht
 CODE=$(curl -s -c "$SUPER_COOKIE" -b "$SUPER_COOKIE" -o /dev/null -w "%{http_code}" -X POST "$BASE/api/super-admin/logout")
 check "POST super-admin logout" "200" "$CODE"
 
-rm -f "$COOKIE" "$SUPER_COOKIE" /tmp/micilla-home.html /tmp/micilla-home-schedule.html /tmp/micilla-school-ris.html /tmp/micilla-school-gbs.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-achievements.html /tmp/micilla-notices.html /tmp/micilla-files.html /tmp/micilla-schedule.html /tmp/micilla-login.json /tmp/micilla-super-login.json /tmp/micilla-super-dash.html
+rm -f "$COOKIE" "$SUPER_COOKIE" /tmp/micilla-home.html /tmp/micilla-home-schedule.html /tmp/micilla-school-ris.html /tmp/micilla-school-gbs.html /tmp/micilla-school-not-found.html /tmp/micilla-school-gbs.html /tmp/micilla-dash.html /tmp/micilla-homepage-content.html /tmp/micilla-profile.html /tmp/micilla-programs.html /tmp/micilla-photos.html /tmp/micilla-achievements.html /tmp/micilla-notices.html /tmp/micilla-files.html /tmp/micilla-schedule.html /tmp/micilla-login.json /tmp/micilla-super-login.json /tmp/micilla-super-dash.html
 
 echo ""
 echo "=== Results: $PASS passed, $FAIL failed ==="

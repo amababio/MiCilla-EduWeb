@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { phoneToTel, phoneToWhatsApp } from "@/lib/phone";
 import { SchoolLogoMark } from "@/components/public-site/SchoolLogoMark";
 import type { PublicSchoolData } from "@/types/public-site";
@@ -12,6 +12,13 @@ type HeaderProps = {
 export function Header({ school }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
   return (
     <header className="sticky top-0 z-50 border-b border-mauve-200 bg-white/95 backdrop-blur-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
@@ -20,13 +27,13 @@ export function Header({ school }: HeaderProps) {
           className="flex min-w-0 items-center gap-3"
           onClick={() => setMenuOpen(false)}
         >
-          <SchoolLogoMark school={school} />
+          <SchoolLogoMark school={school} priority />
           <span className="truncate text-sm font-semibold text-slate-900 sm:text-base">
             {school.name}
           </span>
         </a>
 
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-5 xl:flex">
           {school.navLinks.map((link) => (
             <a
               key={link.href}
@@ -38,10 +45,10 @@ export function Header({ school }: HeaderProps) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-2 sm:flex">
+        <div className="hidden items-center gap-2 md:flex">
           <a
             href={phoneToTel(school.phone)}
-            className="rounded-full border border-mauve-300 px-3 py-1.5 text-xs font-semibold text-mauve-700 transition hover:bg-mauve-50 sm:px-4 sm:text-sm"
+            className="inline-flex min-h-10 items-center rounded-full border border-mauve-300 px-3 py-1.5 text-xs font-semibold text-mauve-700 transition hover:bg-mauve-50 sm:px-4 sm:text-sm"
           >
             Call
           </a>
@@ -49,7 +56,7 @@ export function Header({ school }: HeaderProps) {
             href={phoneToWhatsApp(school.whatsapp)}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-mauve-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-mauve-600 sm:px-4 sm:text-sm"
+            className="inline-flex min-h-10 items-center rounded-full bg-mauve-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-mauve-600 sm:px-4 sm:text-sm"
           >
             WhatsApp
           </a>
@@ -57,7 +64,7 @@ export function Header({ school }: HeaderProps) {
 
         <button
           type="button"
-          className="inline-flex items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 lg:hidden"
+          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-lg border border-slate-200 p-2 text-slate-700 xl:hidden"
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           onClick={() => setMenuOpen((open) => !open)}
@@ -90,23 +97,24 @@ export function Header({ school }: HeaderProps) {
       </div>
 
       {menuOpen ? (
-        <div className="border-t border-mauve-100 bg-white px-4 py-4 lg:hidden">
-          <nav className="flex flex-col gap-3">
+        <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-mauve-100 bg-white px-4 py-4 xl:hidden">
+          <nav className="flex flex-col gap-1">
             {school.navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-mauve-50"
+                className="rounded-lg px-3 py-3 text-sm font-medium text-slate-700 hover:bg-mauve-50"
                 onClick={() => setMenuOpen(false)}
               >
                 {link.label}
               </a>
             ))}
           </nav>
-          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+          <div className="mt-4 flex flex-col gap-2">
             <a
               href={phoneToTel(school.phone)}
-              className="rounded-full border border-mauve-300 px-4 py-2 text-center text-sm font-semibold text-mauve-700"
+              className="inline-flex min-h-11 items-center justify-center rounded-full border border-mauve-300 px-4 py-2 text-sm font-semibold text-mauve-700"
+              onClick={() => setMenuOpen(false)}
             >
               Call {school.phone}
             </a>
@@ -114,7 +122,8 @@ export function Header({ school }: HeaderProps) {
               href={phoneToWhatsApp(school.whatsapp)}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-mauve-500 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm"
+              className="inline-flex min-h-11 items-center justify-center rounded-full bg-mauve-500 px-4 py-2 text-sm font-semibold text-white shadow-sm"
+              onClick={() => setMenuOpen(false)}
             >
               Chat on WhatsApp
             </a>

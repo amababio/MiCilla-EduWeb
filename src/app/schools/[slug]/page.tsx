@@ -7,6 +7,9 @@ import { prisma } from "@/lib/prisma";
 /** Regenerate cached school pages every 5 minutes when content changes. */
 export const revalidate = 300;
 
+/** Only slugs from generateStaticParams are valid; unknown schools return 404. */
+export const dynamicParams = false;
+
 type SchoolPageProps = {
   params: Promise<{ slug: string }>;
 };
