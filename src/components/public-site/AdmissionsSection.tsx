@@ -1,0 +1,55 @@
+import { demoSchool, phoneToTel, phoneToWhatsApp } from "@/data/demoSchool";
+import { SectionHeading } from "@/components/shared/SectionHeading";
+
+export function AdmissionsSection() {
+  return (
+    <section id="admissions" className="bg-white py-16 sm:py-20">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        <SectionHeading
+          title={demoSchool.admissions.headline}
+          subtitle={demoSchool.admissions.description}
+        />
+
+        <div className="rounded-2xl border border-mauve-200 bg-mauve-100/70 p-6 sm:p-8">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-mauve-700">
+            Available Levels
+          </h3>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {demoSchool.admissions.levels.map((level) => (
+              <span
+                key={level}
+                className="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-mauve-200"
+              >
+                {level}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"
+              title="Demo placeholder — download will work in a later phase"
+            >
+              Download Admission Form (Demo)
+            </button>
+            <a
+              href={phoneToTel(demoSchool.phone)}
+              className="inline-flex items-center justify-center rounded-full border-2 border-mauve-300 bg-white px-6 py-3 text-sm font-semibold text-mauve-700 transition hover:bg-mauve-50"
+            >
+              Call Admissions Office
+            </a>
+            <a
+              href={phoneToWhatsApp(demoSchool.whatsapp)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-mauve-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-mauve-600"
+            >
+              WhatsApp Admissions
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
